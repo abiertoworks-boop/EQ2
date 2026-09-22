@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EQ Gate｜EQを体感する入口 — 株式会社Brifu</title>
+<meta name="description" content="EQ Gateは、株式会社Brifuの教育プラットフォーム「EQ Platform」の入口です。場面で気づく体験ワーク、書き出しワーク、EQコアカード®で、EQを無料で体感できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');if(/[?&]hover=1/.test(location.search))document.documentElement.classList.add('capture-hover');</script>
+</head>
+<body>
+
+<canvas id="core-canvas" aria-hidden="true"></canvas>
+
+<header class="site-header" id="header">
+  <div class="container site-header__inner">
+    <a class="brand" href="#top">
+      <span class="brand__name">EQ Gate</span>
+      <span class="brand__by">by 株式会社Brifu</span>
+    </a>
+    <nav class="nav" aria-label="ページ内">
+      <a href="#experience">体験</a>
+      <a href="#filter">見え方</a>
+      <a href="#cycle">認識の循環</a>
+      <a href="#work">ワーク</a>
+      <a href="#cards">コアカード</a>
+      <a href="#journey">道のり</a>
+      <a class="btn btn--sm" href="experience.html"><span>体験ワーク</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top" data-orb="1" data-orb-x="2.6" data-orb-zoom>
+    <div class="container hero__inner">
+      <p class="eyebrow reveal">EQ Gate — EQとの出会いの入口</p>
+      <h1 class="hero__title reveal" style="--d:.1s">EQは、<br>知るより先に、<br>体感するもの。</h1>
+      <p class="hero__lead reveal" style="--d:.25s">同じ出来事でも、受け取り方は人によって違います。<br class="pc">まずは3分。あなたの「見え方」に出会ってください。</p>
+      <div class="hero__actions reveal" style="--d:.4s">
+        <a class="btn" href="experience.html" data-orb-hover="#9b5de5"><span>体験ワークをはじめる</span></a>
+        <a class="btn btn--ghost" href="#cards" data-orb-hover="#dd9a45"><span>EQコアカード®を引く</span></a>
+      </div>
+    </div>
+    <div class="container hero__foot reveal" style="--d:.55s">
+      <div>
+        <span class="mini-label">Free</span>
+        <p>すべて無料で、自由に進められます。</p>
+      </div>
+      <div class="right">
+        <span class="mini-label">Presented by</span>
+        <p><a href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener">株式会社Brifu</a>　｜　<a href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener">EQ Platform</a> の入口</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="sec sec--veil1" id="experience" data-orb="0.6" data-orb-z="-0.6">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow reveal">Experience — 3つの体験</p>
+        <h2 class="h-1 reveal">読むだけでは、<br>心は動かない。</h2>
+        <p class="lead reveal">EQ（感情を理解し、活かす力）は、知識として覚えるより、<br class="pc">自分の心で確かめたときに身につきます。<br class="pc">EQ Gateには、すぐに始められる3つの体験があります。</p>
+      </div>
+      <div class="folders">
+        <a class="fcard reveal" href="experience.html" style="--c:#6a52d9;--c2:#cdbfff" data-orb-hover="#8b5cf6">
+          <div class="fcard__top">
+            <span class="fcard__tab" aria-hidden="true"></span>
+            <img class="fcard__img" src="images/photos/scene.jpg" alt="時計の文字盤と地球が渦を巻く、時の流れのイメージ" loading="lazy">
+            <div class="fcard__flap"><span class="fcard__num">01</span><span class="fcard__meta">約3分・8つの場面</span></div>
+          </div>
+          <div class="fcard__body">
+            <p class="fcard__en">Scene Work</p>
+            <h3>場面で気づく体験ワーク</h3>
+            <p>「この時、どう思う？」に答えるだけ。出来事を事実・解釈・思い込みのどれで見ていたのか、自分の見え方に気づけます。</p>
+            <span class="fcard__go">体験ワークをはじめる</span>
+          </div>
+        </a>
+        <a class="fcard reveal" href="#work" style="--c:#2f8540;--c2:#b9e3b0;--d:.12s" data-orb-hover="#3aa55a">
+          <div class="fcard__top">
+            <span class="fcard__tab" aria-hidden="true"></span>
+            <img class="fcard__img" src="images/photos/write.jpg" alt="琥珀色に揺れる水面をのぞきこんだ写真" loading="lazy">
+            <div class="fcard__flap"><span class="fcard__num">02</span><span class="fcard__meta">約10分・6つのステップ</span></div>
+          </div>
+          <div class="fcard__body">
+            <p class="fcard__en">Writing Work</p>
+            <h3>認識のクセを体験するワーク</h3>
+            <p>感情が動いた出来事を、自分の言葉で書き出します。思考の奥にある「認識」に、自分で気づく体験です。</p>
+            <span class="fcard__go">ワークをはじめる</span>
+          </div>
+        </a>
+        <a class="fcard reveal" href="#cards" style="--c:#d98a2b;--c2:#ffd9a8;--d:.24s" data-orb-hover="#e8832a">
+          <div class="fcard__top">
+            <span class="fcard__tab" aria-hidden="true"></span>
+            <img class="fcard__img" src="images/photos/iceberg.jpg" alt="海に浮かぶ氷山と、EQコアカードの束" loading="lazy">
+            <div class="fcard__flap"><span class="fcard__num">03</span><span class="fcard__meta">約1分・53枚から1枚</span></div>
+          </div>
+          <div class="fcard__body">
+            <p class="fcard__en">EQ Core Card</p>
+            <h3>EQコアカード®を引く</h3>
+            <p>今の自分が意識したいことを、カードで引きます。出たカードに湧いた感情が、心を知る手がかりになります。</p>
+            <span class="fcard__go">カードを引く</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FILTER：事実・解釈・思い込み ============ -->
+  <section class="sec sec--veil2" id="filter" data-orb="0.5" data-orb-x="-2" data-orb-z="-1.4">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow reveal">The Filter — 同じ出来事、3つの見え方</p>
+        <h2 class="h-1 reveal">同じ出来事でも、<br>見るフィルターで結果は変わる。</h2>
+      </div>
+      <div class="filter">
+        <div class="filter__scene reveal">
+          <span class="mini-label">Scene</span>
+          <p class="filter__event">朝、同僚に「おはようございます」と挨拶をした。<br>相手からの返事は、なかった。</p>
+          <p class="filter__ask">この出来事を、3つのフィルターで見比べてみましょう。</p>
+          <div class="tabs" role="tablist" aria-label="3つの見え方">
+            <button class="tab" role="tab" aria-selected="true" data-lens="fact" style="--tc:var(--c-fact)"><span>① 状態認識（事実）</span><small>観察された事実</small></button>
+            <button class="tab" role="tab" aria-selected="false" data-lens="interp" style="--tc:var(--c-interp)"><span>② 解釈（意味づけ）</span><small>意味づけ</small></button>
+            <button class="tab" role="tab" aria-selected="false" data-lens="assume" style="--tc:var(--c-assume)"><span>③ 思い込み</span><small>自分がつくった世界</small></button>
+          </div>
+        </div>
+        <div class="filter__panel reveal" id="filter-panel" role="tabpanel" style="--tc:var(--c-fact);--d:.12s">
+          <div class="fp" id="filter-body">
+            <p class="fp__kicker">① 状態認識（事実）</p>
+            <h3>観察された事実</h3>
+            <p class="fp__desc">客観的に観察された、ありのままの事実を、そのまま捉えている状態。</p>
+            <div class="fp__stage">
+              <p class="bubble">挨拶をした。<br>返事は、なかった。<br>何かあったのかな？</p>
+              <img class="fp__person" src="images/people/fact.png" alt="首をかしげて考える女性" width="347" height="620">
+            </div>
+            <ul class="fp__list">
+              <li>主観や解釈を入れず、事実をそのまま見る</li>
+              <li>良い・悪いの判断をしない</li>
+              <li>五感で確認できること</li>
+            </ul>
+            <p class="fp__q">「実際に起きたことは何か？」</p>
+          </div>
+        </div>
+      </div>
+      <div class="filter__key reveal">
+        <p>人は「事実」ではなく、<br>「認識」を通して見た世界に反応している。</p>
+        <p class="note">事実に戻る力と、認識を選び直す力。それが、質の高い人生をつくる鍵です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CYCLE：認識の循環 ============ -->
+  <section class="sec sec--veil2" id="cycle" data-orb="0.45" data-orb-x="2.2" data-orb-z="-0.8">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow reveal">The Cycle — 認識の循環</p>
+        <h2 class="h-1 reveal">人は、出来事ではなく、<br>認識によって動いている。</h2>
+        <p class="lead reveal">出来事から新しい経験まで、11のステップが循環しながら、人は成長していきます。<br class="pc">アイコンにふれると、それぞれのステップが見られます。</p>
+      </div>
+      <div class="cycle">
+        <div class="ring reveal" id="ring">
+          <div class="ring__guide" aria-hidden="true"></div>
+          <svg class="ring__svg" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50" pathLength="100"/></svg>
+          <svg class="ring__links" id="ring-links" viewBox="0 0 100 100" aria-hidden="true"></svg>
+          <div class="ring__center" id="ring-center" aria-live="polite">
+            <span class="ring__no">EQ Recognition Cycle</span>
+            <span class="ring__name">認識の循環</span>
+            <span class="ring__desc">新しい経験は、<br>次の認知の入口になる。</span>
+          </div>
+        </div>
+        <div class="principles">
+          <p class="eyebrow reveal">EQ認識理論 — 3つの原理</p>
+          <div class="principle reveal" tabindex="0" data-link="1,3,4,9" style="--pc:#e0702a">
+            <span class="principle__no">01</span>
+            <h3>認識が、感情と行動を生み出す</h3>
+            <p>人は出来事そのものではなく、自らの認識によって感情と行動を生み出している。同じ出来事でも反応が異なるのは、認識が異なるためである。</p>
+            <span class="principle__steps">出来事・認識・感情・行動</span>
+          </div>
+          <div class="principle reveal" tabindex="0" data-link="3,5,6,7" style="--pc:#3f5fd1;--d:.1s">
+            <span class="principle__no">02</span>
+            <h3>認識は、自覚されなければ変化しない</h3>
+            <p>認識は常に存在している。しかし、自覚されなければ、新しい視点へ更新されることはない。</p>
+            <span class="principle__steps">認識・自覚・理解・認識の更新</span>
+          </div>
+          <div class="principle reveal" tabindex="0" data-link="7,8,9,10,11,2" style="--pc:#2f9a62;--d:.2s">
+            <span class="principle__no">03</span>
+            <h3>認識の質は、成長し続ける</h3>
+            <p>認識の質が高まるほど、人は感情を適切に活かし、自分と他者を尊重した選択と行動ができるようになる。</p>
+            <span class="principle__steps">認識の更新・あり方・行動・結果・新しい経験・認知</span>
+            <small>仮説（今後の実践・研究で検証）</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK：認識のクセを体験する ============ -->
+  <section class="sec sec--veil3" id="work" data-orb="0.35" data-orb-z="-2">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow reveal">Self-Awareness Work — 認識のクセを体験する</p>
+        <h2 class="h-1 reveal">感情が動いた出来事を、<br>6つのステップで書き出す。</h2>
+        <p class="lead reveal">「EQ認識理論 Basic Workbook」に沿って、出来事・感情・思考・認識・自覚、そして大切にしていた価値観の順に、<br class="pc">自分の言葉で書いてみましょう。書いた内容はこの画面の中だけで使われ、どこにも送信されません。</p>
+      </div>
+
+      <div class="stages reveal">
+        <div class="stage3" style="--sc:#1f5bb8" data-orb-hover="#1f5bb8">
+          <div class="stage3__card">
+            <div class="stage3__art"><span class="stage3__no">01</span><img src="images/people/notice.png" alt="人差し指を立てて、何かに気づいた女性" width="366" height="560" loading="lazy"></div>
+            <div class="stage3__body">
+              <h3>状態認識</h3>
+              <span class="stage3__key">気づき</span>
+              <p>身体・感情・思考・行動など、「今の自分の状態」に気づく段階。無意識のままでは、変化は始まりません。</p>
+            </div>
+          </div>
+        </div>
+        <div class="stage3" style="--sc:#2f8540" data-orb-hover="#3aa55a">
+          <div class="stage3__card">
+            <div class="stage3__art"><span class="stage3__no">02</span><img src="images/people/accept.png" alt="手のひらを差し出して受けとめる女性" width="429" height="560" loading="lazy"></div>
+            <div class="stage3__body">
+              <h3>感情の受けとめ</h3>
+              <span class="stage3__key">受容</span>
+              <p>湧き上がる感情を、良い・悪いと判断せず、「大切な情報」として受けとめる段階。</p>
+            </div>
+          </div>
+        </div>
+        <div class="stage3" style="--sc:#dd6f1d" data-orb-hover="#e8832a">
+          <div class="stage3__card">
+            <div class="stage3__art"><span class="stage3__no">03</span><img src="images/people/aware.png" alt="指でOKサインをつくる女性" width="317" height="560" loading="lazy"></div>
+            <div class="stage3__body">
+              <h3>自覚</h3>
+              <span class="stage3__key">客観視</span>
+              <p>感情の奥にある「認識」を客観的に見つめ、「自分はこう認識していたのか」と気づく段階。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" id="work-panel">
+        <div class="progress" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span><span></span></div>
+
+        <div class="step is-show" data-step="1">
+          <p class="step__label">STEP 1 — 状態認識</p>
+          <h3 class="step__title">出来事</h3>
+          <p class="step__sub">最近、心が動いた出来事を1つ思い出してください。うれしかったことでも、もやもやしたことでもかまいません。ここでは、見たこと・聞いたことの事実だけを書きます。</p>
+          <textarea class="textarea" id="w-event" placeholder="例：上司から資料の直しを頼まれた／友人から「ありがとう」と言われた" aria-label="出来事"></textarea>
+          <div class="step-nav"><button class="btn" data-go="2"><span>次へ</span></button></div>
+        </div>
+
+        <div class="step" data-step="2">
+          <p class="step__label">STEP 2 — 感情の受けとめ</p>
+          <h3 class="step__title">感情</h3>
+          <p class="step__sub">その時、どんな感情が動きましたか？ 当てはまるものをすべて選んでください。良い・悪いはありません。感情は、認識を教えてくれる大切な情報です。</p>
+          <div class="chips" id="w-emotions"></div>
+          <label class="slider"><span>感情の強さ：<b id="w-intensity-v">5</b> / 10</span><input type="range" min="0" max="10" value="5" id="w-intensity"></label>
+          <div class="step-nav"><button class="btn btn--ghost" data-go="1"><span>戻る</span></button><button class="btn" data-go="3"><span>次へ</span></button></div>
+        </div>
+
+        <div class="step" data-step="3">
+          <p class="step__label">STEP 3 — 状態認識</p>
+          <h3 class="step__title">思考（心の声）</h3>
+          <p class="step__sub">その感情が動いた時、心の中で、どんな言葉をつぶやいていましたか？ できるだけ、そのまま書いてください。</p>
+          <textarea class="textarea" id="w-thought" placeholder="例：また失敗した／認めてもらえた／どうしよう、間に合わない" aria-label="思考"></textarea>
+          <div class="step-nav"><button class="btn btn--ghost" data-go="2"><span>戻る</span></button><button class="btn" data-go="4"><span>次へ</span></button></div>
+        </div>
+
+        <div class="step" data-step="4">
+          <p class="step__label">STEP 4 — 認識</p>
+          <h3 class="step__title">認識（意味づけ）</h3>
+          <p class="step__sub">心の声の奥には、出来事への「意味づけ」があります。うれしい出来事にも、つらい出来事にも使える3つの問いです。</p>
+          <div class="q"><label for="w-q1">その出来事を、どんな出来事だと受け止めていましたか？</label><input class="field" id="w-q1" placeholder="例：否定された／認められた／試されている"></div>
+          <div class="q"><label for="w-q2">その受け止め方の奥で、大切にしていたことは何ですか？</label><input class="field" id="w-q2" placeholder="例：信頼されること／きちんとやり遂げること"></div>
+          <div class="q"><label for="w-q3">「〜であるべき」「〜のはず」と思っていたことはありますか？</label><input class="field" id="w-q3" placeholder="例：失敗してはいけない／努力は報われるはず"></div>
+          <div class="step-nav"><button class="btn btn--ghost" data-go="3"><span>戻る</span></button><button class="btn" data-go="5"><span>次へ</span></button></div>
+        </div>
+
+        <div class="step" data-step="5">
+          <p class="step__label">STEP 5 — 自覚</p>
+          <h3 class="step__title">自覚</h3>
+          <p class="step__sub">自覚とは、「自分はこのように認識していた」と、少し離れて見ることです。書いた言葉を、もう一度ながめてみましょう。</p>
+          <p class="mirror" id="w-mirror"></p>
+          <textarea class="textarea" id="w-awareness" placeholder="今日、気づいたことを書いてください" aria-label="自覚したこと"></textarea>
+          <div class="step-nav"><button class="btn btn--ghost" data-go="4"><span>戻る</span></button><button class="btn" data-go="6"><span>次へ</span></button></div>
+        </div>
+
+        <div class="step" data-step="6">
+          <p class="step__label">STEP 6 — 価値観</p>
+          <h3 class="step__title">大切にしていた価値観</h3>
+          <p class="step__sub">STEP 4で書いた「大切にしていたこと」に、いちばん近い価値観を1つ選んでください。EQコアカード®の8つの色につながっています。</p>
+          <div class="vpick" id="w-values" role="radiogroup" aria-label="大切にしていた価値観"></div>
+          <div class="step-nav"><button class="btn btn--ghost" data-go="5"><span>戻る</span></button><button class="btn" id="w-finish"><span>ふり返りを見る</span></button></div>
+        </div>
+
+        <div class="step" data-step="7">
+          <h3 class="result__title">今日、あなたが自覚したこと</h3>
+          <p class="result__body" id="w-result"></p>
+          <div class="result__value" id="w-value-box" hidden></div>
+          <div class="tip">
+            <span class="mini-label">明日から使える問い</span>
+            <p>感情が動いたら、この問いだけ思い出してください。「私は今、この出来事にどんな意味をつけているのだろう？」</p>
+          </div>
+          <div class="step-nav"><button class="btn btn--ghost" id="w-restart"><span>もう一度書く</span></button><button class="btn" id="w-to-card"><span>コアカードを引く</span></button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CARDS：EQコアカード® ============ -->
+  <section class="sec sec--veil3" id="cards" data-orb="0.3" data-orb-z="-2.4">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow reveal">EQ Core Card® — 実践ツール</p>
+        <h2 class="h-1 reveal">自分の心は、見えない。<br>だから、言葉にする。</h2>
+        <p class="lead reveal">53枚のEQコアカード®から、今の自分が意識したいことを1枚引いてみましょう。<br class="pc">出たカードを見て、まず湧いた感情を、そのまま感じてください。</p>
+      </div>
+
+      <div class="deck-area reveal">
+        <p class="deck-info">残り <span id="eqcc-remaining">53</span> 枚</p>
+        <div class="carousel-wrapper" id="eqccCarouselWrapper">
+          <div class="carousel-scene" id="eqccCarouselScene"></div>
+        </div>
+        <p class="swipe-hint">スワイプでカードを選ぶ・タップで引く</p>
+        <div class="deck-actions">
+          <button class="btn" id="eqcc-draw-btn"><span>カードを引く</span></button>
+          <button class="btn btn--ghost" id="eqcc-shuffle"><span>シャッフル</span></button>
+        </div>
+      </div>
+
+      <div class="drawn" id="eqcc-drawn">
+        <div class="drawn-card" id="eqcc-drawn-card">
+          <div class="card-color-bar" id="eqcc-card-color-bar"></div>
+          <div class="card-top-dash"></div>
+          <div class="card-action" id="eqcc-card-action"></div>
+          <div class="card-bottom-wrap">
+            <div class="card-chevron" id="eqcc-card-chevron-shape">
+              <div class="chevron-text" id="eqcc-card-value-text"></div>
+            </div>
+            <div class="card-house-wall"></div>
+            <div class="emotion-container">
+              <svg width="110" height="28" viewBox="0 0 110 28" aria-hidden="true">
+                <path id="eqccEmotionCurve" d="M 8 22 Q 55 4 102 22" fill="transparent" />
+                <text><textPath href="#eqccEmotionCurve" startOffset="50%" text-anchor="middle" fill="#D32F2F" font-family="'Brush Script MT', cursive, serif" font-size="15" font-style="italic">emotion</textPath></text>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button class="btn map-cta" id="eqcc-map-cta" type="button"><i aria-hidden="true"></i><span>このカードの価値観を見る</span></button>
+      </div>
+
+      <div class="notes" id="eqcc-notes">
+        <p class="notes__title">気づきノート</p>
+        <div class="q"><label for="n1">① このカードを見て、どんな感情が生まれましたか？</label><textarea class="textarea" id="n1" placeholder="感じたことを自由に書いてください"></textarea></div>
+        <div class="q"><label for="n2">② このカードから、自分への気づきは何ですか？</label><textarea class="textarea" id="n2" placeholder="気づいたことを書いてください"></textarea></div>
+        <div class="q"><label for="n3">③ この気づきをふまえて、どんな行動をとりますか？</label><textarea class="textarea" id="n3" placeholder="具体的な行動と期限を書いてください"></textarea></div>
+      </div>
+
+      <div class="map8" id="map8">
+        <div class="section-head">
+          <p class="eyebrow reveal">8 Colors — 価値観成長マップ</p>
+          <h2 class="h-1 reveal">8つの色が、<br>価値観の育ち方を表す。</h2>
+          <p class="lead reveal">カードの色帯は、8つの価値観のどれかに対応しています。<br class="pc">色にふれると、その色の実物のカードと言葉が見られます。一枚一枚の言葉の使い方は、講座の中で体験していきます。</p>
+        </div>
+        <div class="grid8" id="grid8"></div>
+        <div class="spot" id="spot" aria-live="polite">
+          <div class="spot__body">
+            <img class="spot__icon" id="spot-icon" src="images/values/v1.png" alt="" width="72" height="72">
+            <p class="spot__label" id="spot-label">COLOR 01</p>
+            <h3 id="spot-name"></h3>
+            <p class="spot__desc" id="spot-desc"></p>
+            <p class="spot__drawn" id="spot-drawn" hidden></p>
+            <p class="spot__text" id="spot-text"></p>
+            <div class="spot__words" id="spot-words"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOURNEY：EQ Platform（内側に湾曲したギャラリー） ============ -->
+  <section class="sec sec--veil2 jgal-sec" id="journey" data-orb="0.35" data-orb-x="-2.4" data-orb-z="-1.2">
+    <div class="jgal" id="jgal" aria-label="EQ Platformの6つのステージ。左右にドラッグして見られます">
+      <div class="jgal__scene" id="jgal-scene"></div>
+      <p class="jgal__hint">ドラッグ・スワイプで回せます</p>
+    </div>
+    <div class="container jgal-foot">
+      <div class="section-head">
+        <p class="eyebrow reveal">EQ Platform — ゲートの先にある道のり</p>
+        <h2 class="h-1 reveal">入口の先に、<br>成長と実践がつながる場所。</h2>
+        <p class="lead reveal">EQ Gateは、株式会社Brifuの教育プラットフォーム「EQ Platform」の入口です。学び、気づき、育ち、実践し、やがて社会へ活かしていく。自分のペースで、次の一歩を選べます。</p>
+        <p class="jring__free reveal"><b>ここまでの体験は、すべて無料で完結しています。</b><br>ここから先は、目的や成長段階に合わせて、自由に選んでください。<br><span class="note">※各ステージへの移行には、Brifuが定める受講条件・実践条件があります。</span></p>
+      </div>
+      <div class="jgal-actions reveal">
+        <a class="btn" href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener"><span>EQ Platformを見る</span></a>
+        <a class="btn btn--ghost" href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener"><span>株式会社Brifuについて</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="sec closing" id="start" data-orb="0.9">
+    <div class="container">
+      <p class="eyebrow reveal">Start Here</p>
+      <h2 class="h-1 reveal">自分の心を、<br>知ることから。</h2>
+      <p class="lead reveal">どこから始めても大丈夫です。すべて無料で、自由に進められます。</p>
+      <div class="hero__actions reveal">
+        <a class="btn" href="experience.html" data-orb-hover="#9b5de5"><span>体験ワークをはじめる</span></a>
+        <a class="btn btn--ghost" href="#cards" data-orb-hover="#dd9a45"><span>EQコアカード®を引く</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p>感情を理解し、お互いを大切にする社会をつくる。</p>
+      <small>© 株式会社Brifu — EQ Gate</small>
+    </div>
+    <nav aria-label="関連サイト">
+      <a href="experience.html">体験ワーク</a>
+      <a href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener">EQ Platform</a>
+      <a href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener">株式会社Brifu</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="curtain" id="curtain" aria-hidden="true"><span class="curtain__label" id="curtain-label"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/orb.js"></script>
+<script src="js/common.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cards.js"></script>
+</body>
+</html>

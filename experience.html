@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>場面で気づく体験ワーク｜EQ Gate — 株式会社Brifu</title>
+<meta name="description" content="8つの場面で「この時、どう思う？」に答えるだけ。出来事を事実・解釈・思い込みのどれで見ていたのか、自分の見え方に気づく無料の体験ワークです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');</script>
+</head>
+<body>
+
+<canvas id="core-canvas" aria-hidden="true"></canvas>
+
+<header class="site-header" id="header">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">EQ Gate</span>
+      <span class="brand__by">by 株式会社Brifu</span>
+    </a>
+    <nav class="nav" aria-label="サイト内">
+      <a href="index.html#filter">見え方</a>
+      <a href="index.html#cycle">認識の循環</a>
+      <a href="index.html#work">ワーク</a>
+      <a href="index.html#cards">コアカード</a>
+      <a class="btn btn--sm btn--ghost" href="index.html"><span>EQ Gate トップ</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero diag-hero" id="experience" data-orb="0.9" data-orb-x="2.6">
+    <div class="container">
+      <div class="diag">
+        <div class="section-head">
+          <p class="eyebrow reveal">EQ Gate — 場面で気づく体験ワーク</p>
+          <h1 class="h-1 reveal">同じ出来事を、<br>あなたはどう見ている？</h1>
+          <p class="lead reveal">8つの場面で「この時、どう思う？」に答えるだけ。<br class="pc">点数やタイプは出ません。約3分、すべて無料です。</p>
+        </div>
+
+        <div class="panel reveal" id="diag-panel" aria-live="polite">
+
+          <!-- はじめに -->
+          <div class="step is-show" id="d-intro">
+            <p class="step__label">HOW TO</p>
+            <h2 class="step__title">はじめる前に</h2>
+            <ul class="intro-list">
+              <li>日常によくある8つの場面が出てきます。</li>
+              <li>頭で「正しい答え」を考えず、最初に心に浮かんだものを選んでください。</li>
+              <li>最後に、選んだ言葉を「事実・解釈・思い込み」の3つの見え方で並べて、ふり返ります。</li>
+            </ul>
+            <button class="btn" id="d-start"><span>体験ワークをはじめる</span></button>
+          </div>
+
+          <!-- 場面 -->
+          <div class="step" id="d-question">
+            <div class="progress" id="d-progress" aria-hidden="true"></div>
+            <p class="scene-no" id="d-no">SCENE 01 / 08</p>
+            <p class="scene-text" id="d-scene"></p>
+            <p class="scene-ask">この時、最初に心に浮かぶのは？</p>
+            <div class="options" id="d-options"></div>
+            <div class="diag-foot">
+              <button class="linkbtn" id="d-back" type="button">ひとつ戻る</button>
+              <span>いちばん近いものを選んでください</span>
+            </div>
+          </div>
+
+          <!-- ふり返り（判定はしない。「自分はこう見ていたのか」に気づくだけ） -->
+          <div class="step" id="d-result">
+            <div class="type">
+              <p class="type__lens">Reflection — 今日のふり返り</p>
+              <h2 class="type__name">自分は、<br>こう見ていたのか。</h2>
+            </div>
+            <p class="type__text">あなたが選んだ言葉を、3つの見え方で並べました。正解・不正解はありません。同じ出来事でも、見るフィルターによって、心の動きが変わっていたことに気づけたら十分です。</p>
+            <div class="ribbon" id="r-ribbon" aria-hidden="true">
+              <span style="background:var(--c-fact)"></span><span style="background:var(--c-interp)"></span><span style="background:var(--c-assume)"></span>
+            </div>
+            <p class="ribbon-legend" id="r-legend"></p>
+
+            <div class="block">
+              <h3 class="block__title">場面ごとのふり返り</h3>
+              <p class="note" style="margin-bottom:.9rem">あなたが選んだ言葉と、事実だけに戻ったときの見え方です。</p>
+              <ul class="mirror-list" id="r-mirror"></ul>
+            </div>
+
+            <div class="block">
+              <h3 class="block__title">見え方を選び直す、3つの問い</h3>
+              <div class="asks">
+                <div class="ask" style="--tc:var(--c-fact)"><span>事実に戻る</span><p>「実際に起きたことは何か？」</p></div>
+                <div class="ask" style="--tc:var(--c-interp)"><span>解釈に気づく</span><p>「この出来事を、どう受け止めているか？」</p></div>
+                <div class="ask" style="--tc:var(--c-assume)"><span>思い込みを手放す</span><p>「それは本当に事実か？ 他の可能性はないか？」</p></div>
+              </div>
+            </div>
+
+            <div class="block next-theme">
+              <span class="mini-label">Next Theme — 次に知るべきテーマ</span>
+              <h3 id="t-title"></h3>
+              <p id="t-text"></p>
+              <a class="btn" id="t-link" href="index.html"><span id="t-btn"></span></a>
+            </div>
+
+            <div class="block mail">
+              <h3 class="block__title">今日のふり返りを、メールで受け取る</h3>
+              <p>メールアドレスを登録すると、今日のふり返りと、EQ Gateの無料コンテンツ（動画・勉強会・体験会）のお知らせが届きます。</p>
+              <form id="mail-form" novalidate>
+                <input class="field" type="text" name="name" placeholder="お名前（ニックネーム可・任意）" autocomplete="nickname" aria-label="お名前">
+                <input class="field" type="email" name="email" placeholder="メールアドレス" autocomplete="email" required aria-label="メールアドレス">
+                <input type="hidden" name="record" id="mail-record">
+                <label class="consent"><input type="checkbox" name="agree" required> 株式会社Brifuから、EQ Gateに関するお知らせを受け取ることに同意します。</label>
+                <button class="btn" type="submit"><span>ふり返りを受け取る</span></button>
+                <p class="mail__msg" id="mail-msg" role="status"></p>
+                <p class="note">ご登録内容は、株式会社Brifu（info@brifu.co.jp）に届きます。送信には、メール送信サービス「FormSubmit」を利用しています。</p>
+              </form>
+            </div>
+
+            <p class="note" style="margin-top:1.6rem;text-align:center">悩みから、自分に合う学び方を知りたい方は、<br class="pc"><a href="https://abiertoworks-boop.github.io/brifu-site/diagnosis.html" target="_blank" rel="noopener">株式会社Brifuの「かんたんEQ診断」</a>もご利用ください。</p>
+
+            <div class="step-nav">
+              <button class="btn btn--ghost" id="d-restart"><span>もう一度やってみる</span></button>
+              <a class="btn btn--ghost" href="index.html#experience"><span>ほかの体験を見る</span></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p>感情を理解し、お互いを大切にする社会をつくる。</p>
+      <small>© 株式会社Brifu — EQ Gate</small>
+    </div>
+    <nav aria-label="関連サイト">
+      <a href="index.html">EQ Gate トップ</a>
+      <a href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener">EQ Platform</a>
+      <a href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener">株式会社Brifu</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/orb.js"></script>
+<script src="js/common.js"></script>
+<script src="js/experience.js"></script>
+</body>
+</html>
