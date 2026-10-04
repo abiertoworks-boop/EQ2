@@ -2,7 +2,8 @@
    感情のコア — 点と線のネットワーク球体（参考動画 2026-10-04 の動き）
    ・暗い点が球状に散らばり、近いもの同士が細い線でつながる
    ・その網の中を金色の光がゆっくり巡り、通ったところの点と線が灯る
-   ・うしろに煙のような暗い霞、足元に水面の波紋
+   ・中央に青白い光の玉。ときどき中央から外へ青白い稲妻が走る
+   ・足元に水面の波紋
    ・枠にホバーすると、光の色がその色に変わり、網全体が強く波立つ（穏やかな揺れ＋細かな震え）
    ・球体は奥へ離れ、手前へ戻る奥行きの動きを続ける
    外から使う関数は window.EQOrb にまとめて公開する。
@@ -134,11 +135,11 @@
   }
 
   /* ---------- 火花（光が動くたびに少し散る／ときどき小さく弾ける） ---------- */
-  var SPARKS = isSmall ? 90 : 160;
+  var SPARKS = isSmall ? 140 : 260;
   var spPos = new Float32Array(SPARKS * 3);
   var spCol = new Float32Array(SPARKS * 3);
-  var spVel = [], spLife = new Float32Array(SPARKS), spMax = new Float32Array(SPARKS);
-  for (i = 0; i < SPARKS; i++) { spVel.push(new THREE.Vector3()); spLife[i] = 0; spPos[i * 3 + 1] = 9999; }
+  var spVel = [], spLife = new Float32Array(SPARKS), spMax = new Float32Array(SPARKS), spBase = [];
+  for (i = 0; i < SPARKS; i++) { spVel.push(new THREE.Vector3()); spBase.push(new THREE.Color()); spLife[i] = 0; spPos[i * 3 + 1] = 9999; }
   var sparkGeo = new THREE.BufferGeometry();
   sparkGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3));
   sparkGeo.setAttribute('color', new THREE.BufferAttribute(spCol, 3));
@@ -155,6 +156,7 @@
     spPos[k * 3] = at.x; spPos[k * 3 + 1] = at.y; spPos[k * 3 + 2] = at.z;
     spVel[k].set((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).normalize().multiplyScalar(0.25 + Math.random() * power);
     spMax[k] = spLife[k] = 0.45 + Math.random() * 0.6;
+    spBase[k].copy(color);
     spCol[k * 3] = color.r; spCol[k * 3 + 1] = color.g; spCol[k * 3 + 2] = color.b;
   }
 
@@ -164,21 +166,59 @@
   burst.renderOrder = 6;
   burst.scale.setScalar(0.5);
   group.add(burst);
-  var burstAt = 0, burstT = 0, burstWait = 1.5 + Math.random() * 2.5;
+  var burstAt = 0, burstT = 0, burstWait = 0.8 + Math.random() * 1.4;
 
-  /* ---------- うしろの霞（煙のような暗い雲） ---------- */
-  var smokeTex = radialTexture([[0, 'rgba(40,44,58,0.26)'], [0.45, 'rgba(40,44,58,0.13)'], [1, 'rgba(40,44,58,0)']]);
-  var smoke = [];
-  for (i = 0; i < 8; i++) {
-    var sm = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, transparent: true, depthWrite: false, opacity: 0.5 + Math.random() * 0.35 }));
-    var sr = R0 * (0.5 + Math.random() * 0.9);
-    var sth = Math.random() * Math.PI * 2, sph = Math.acos(Math.random() * 2 - 1);
-    sm.position.set(sr * Math.sin(sph) * Math.cos(sth), sr * Math.sin(sph) * Math.sin(sth), sr * Math.cos(sph) - 0.4);
-    sm.scale.setScalar(2.2 + Math.random() * 2.4);
-    sm.userData = { base: sm.position.clone(), sp: 0.1 + Math.random() * 0.25, off: Math.random() * 10 };
-    sm.renderOrder = 0;
-    group.add(sm);
-    smoke.push(sm);
+  /* ---------- 中央の青白い光の玉 ---------- */
+  var CORE_BLUE = new THREE.Color('#9fd8ff');
+  var core = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: radialTexture([[0, 'rgba(255,255,255,1)'], [0.18, 'rgba(226,245,255,0.9)'], [0.45, 'rgba(150,210,255,0.45)'], [1, 'rgba(120,190,255,0)']]),
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.9
+  }));
+  core.scale.setScalar(1.1);
+  core.renderOrder = 3;
+  group.add(core);
+
+  /* ---------- 中央から外へ走る、青白い稲妻 ---------- */
+  var BOLTS = 5, SEG = 7;
+  var bpos = new Float32Array(BOLTS * SEG * 6);
+  var bcol = new Float32Array(BOLTS * SEG * 6);
+  var boltGeo = new THREE.BufferGeometry();
+  boltGeo.setAttribute('position', new THREE.BufferAttribute(bpos, 3));
+  boltGeo.setAttribute('color', new THREE.BufferAttribute(bcol, 3));
+  var bolts = new THREE.LineSegments(boltGeo, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 1, depthWrite: false
+  }));
+  bolts.renderOrder = 6;
+  group.add(bolts);
+  var boltDemo = params.has('bolt');
+  var boltT = 0, boltWait = boltDemo ? 0.2 : 2 + Math.random() * 2.5, boltLen = 0;
+
+  function fireBolts() {
+    boltLen = 0;
+    var n = 3 + Math.floor(Math.random() * 3);
+    for (var bi = 0; bi < n && bi < BOLTS; bi++) {
+      var node = Math.floor(Math.random() * N);
+      var ex = pos[node * 3], ey = pos[node * 3 + 1], ez = pos[node * 3 + 2];
+      var px = 0, py = 0, pz = 0;
+      for (var s = 1; s <= SEG; s++) {
+        var f = s / SEG;
+        var spread = 0.3 * (1 - Math.abs(f - 0.5) * 1.4);
+        var nx2 = ex * f + (Math.random() - 0.5) * spread;
+        var ny2 = ey * f + (Math.random() - 0.5) * spread;
+        var nz2 = ez * f + (Math.random() - 0.5) * spread;
+        var o = boltLen * 6;
+        bpos[o] = px; bpos[o + 1] = py; bpos[o + 2] = pz;
+        bpos[o + 3] = nx2; bpos[o + 4] = ny2; bpos[o + 5] = nz2;
+        boltLen++;
+        px = nx2; py = ny2; pz = nz2;
+      }
+      /* 稲妻の先が触れた点から、火花を散らす */
+      tmp.set(ex, ey, ez);
+      for (var q = 0; q < 6; q++) emitSpark(tmp, 1.1, CORE_BLUE);
+    }
+    boltGeo.setDrawRange(0, boltLen * 2);
+    boltGeo.attributes.position.needsUpdate = true;
+    boltT = 0.42;
   }
 
   /* ---------- うしろのやわらかな光 ---------- */
@@ -354,21 +394,21 @@
     if (!reduceMotion) {
       burstWait -= delta;
       if (burstWait <= 0) {
-        burstWait = 1.6 + Math.random() * 3.4;
+        burstWait = 0.7 + Math.random() * 1.5;
         burstAt = Math.floor(Math.random() * N);
-        burstT = 0.55;
-        for (j = 0; j < 14; j++) {
+        burstT = 0.7;
+        for (j = 0; j < 30; j++) {
           tmp.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
-          emitSpark(tmp, 1.4, flareColor);
+          emitSpark(tmp, 2.1, flareColor);
         }
       }
       if (burstT > 0) {
         burstT -= delta;
-        var bp = Math.max(0, burstT) / 0.55;
+        var bp = Math.max(0, burstT) / 0.7;
         burst.position.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
         burst.material.color.copy(flareColor);
-        burst.scale.setScalar(0.35 + (1 - bp) * 1.5);
-        burst.material.opacity = bp * 0.9;
+        burst.scale.setScalar(0.5 + (1 - bp) * 3.2);
+        burst.material.opacity = bp;
       } else burst.material.opacity = 0;
     }
 
@@ -379,7 +419,7 @@
       var k3 = i * 3, fade = Math.max(0, spLife[i] / spMax[i]);
       spPos[k3] += spVel[i].x * delta; spPos[k3 + 1] += spVel[i].y * delta; spPos[k3 + 2] += spVel[i].z * delta;
       spVel[i].multiplyScalar(0.94);
-      spCol[k3] = flareColor.r * fade; spCol[k3 + 1] = flareColor.g * fade * 0.95; spCol[k3 + 2] = flareColor.b * fade * 0.8;
+      spCol[k3] = spBase[i].r * fade; spCol[k3 + 1] = spBase[i].g * fade; spCol[k3 + 2] = spBase[i].b * fade;
       if (spLife[i] <= 0) { spPos[k3 + 1] = 9999; spCol[k3] = spCol[k3 + 1] = spCol[k3 + 2] = 0; }
     }
     sparkGeo.attributes.position.needsUpdate = true;
@@ -431,12 +471,25 @@
     glowGeo.attributes.position.needsUpdate = true;
     glowGeo.attributes.color.needsUpdate = true;
 
-    /* 霞：ゆっくり漂う */
-    smoke.forEach(function (sm) {
-      var u = sm.userData;
-      sm.position.x = u.base.x + Math.sin(t * u.sp + u.off) * 0.25 * ms;
-      sm.position.y = u.base.y + Math.cos(t * u.sp * 0.8 + u.off) * 0.2 * ms;
-    });
+    /* 中央の青白い光：静かに呼吸し、ときどき稲妻を放つ */
+    core.scale.setScalar(0.95 + Math.sin(t * 0.8) * 0.08 + (boltT > 0 ? boltT * 1.2 : 0));
+    core.material.opacity = 0.75 + Math.sin(t * 0.8) * 0.1 + (boltT > 0 ? boltT * 0.5 : 0);
+    if (!reduceMotion) {
+      boltWait -= delta;
+      if (boltWait <= 0) { boltWait = boltDemo ? 0.5 : 3 + Math.random() * 4; fireBolts(); }
+      if (boltT > 0) {
+        boltT -= delta;
+        var bf = boltDemo ? 1 : Math.max(0, boltT) / 0.42;
+        bolts.material.opacity = Math.min(1, bf * 1.4);
+        for (i = 0; i < boltLen * 2; i++) {
+          var mixw = (i % 2) ? 0.55 : 0.1;
+          bcol[i * 3] = 0.12 + mixw * 0.7;
+          bcol[i * 3 + 1] = 0.45 + mixw * 0.5;
+          bcol[i * 3 + 2] = 0.95;
+        }
+        boltGeo.attributes.color.needsUpdate = true;
+      } else if (boltLen) { boltGeo.setDrawRange(0, 0); boltLen = 0; }
+    }
 
     /* 全体の回転と漂い */
     group.rotation.y += delta * (0.07 + now.speed * 0.05) * ms;

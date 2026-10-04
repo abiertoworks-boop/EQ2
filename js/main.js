@@ -297,7 +297,7 @@
   }
 
   /* ==========================================================
-     4. 8色の価値観成長マップ（実物カードの写真つき）
+     4. 8色の価値観（書き出しワークのSTEP 6で使う。マップのセクションは廃止）
      ========================================================== */
   var COLORS8 = [
     { no: 1, title: '自己認識', name: '黄色', hex: '#e8b93f', desc: '自己認識力を高める価値観' },
@@ -310,79 +310,6 @@
     { no: 8, title: '成熟した自己', name: '朱赤色', hex: '#c0392b', desc: '自分軸（成熟した自己）を確立する価値観' }
   ];
   window.EQ_COLORS8 = COLORS8;
-  var grid8 = document.getElementById('grid8');
-  var tiles = [];
-  COLORS8.forEach(function (c) {
-    var el = document.createElement('button');
-    el.type = 'button';
-    el.className = 'c8';
-    el.id = 'c8-' + c.no;
-    el.style.setProperty('--c8', c.hex);
-    el.innerHTML = '<span class="c8__icon"><img src="images/values/v' + c.no + '.png" alt="" loading="lazy"></span>' +
-      '<span class="c8__head"><span class="c8__badge">' + String(c.no).padStart(2, '0') + '</span><span class="c8__title">' + c.title + '</span></span>' +
-      '<span class="c8__desc" style="display:block">' + c.desc + '</span><span class="c8__color">' + c.name + 'のカード</span>';
-    Orb.bind(el, c.hex, 0.45, 1.3, 1.5);
-    el.addEventListener('click', function () { showSpot(c.no, null); });
-    grid8.appendChild(el);
-    tiles.push(el);
-  });
-
-  var spot = document.getElementById('spot');
-  function showSpot(no, drawn) {
-    var c = COLORS8[no - 1];
-    tiles.forEach(function (t, k) { t.classList.toggle('is-on', k === no - 1); });
-    spot.style.setProperty('--sc', c.hex);
-    document.getElementById('spot-icon').src = 'images/values/v' + no + '.png';
-    document.getElementById('spot-label').textContent = 'COLOR ' + String(no).padStart(2, '0') + ' — ' + c.name + 'のカード';
-    document.getElementById('spot-name').textContent = c.title;
-    document.getElementById('spot-desc').textContent = c.desc;
-    var drawnEl = document.getElementById('spot-drawn');
-    if (drawn) {
-      drawnEl.hidden = false;
-      drawnEl.innerHTML = 'あなたが引いたカード：<b></b>（<span></span>）';
-      drawnEl.querySelector('b').textContent = drawn.action.replace(/<br>/g, '');
-      drawnEl.querySelector('span').textContent = drawn.value;
-    } else drawnEl.hidden = true;
-    document.getElementById('spot-text').textContent = drawn
-      ? 'このカードは、「' + c.desc + '」の仲間です。同じ色のカードには、次のような言葉が並んでいます。'
-      : '「' + c.desc + '」の色です。この色のカードには、次のような言葉が並んでいます。';
-    var words = document.getElementById('spot-words');
-    words.innerHTML = '';
-    var cards = window.EQCC_CARDS || [], map = window.EQCC_COLOR_MAP || {};
-    cards.filter(function (k) { return map[k.hex.toUpperCase()] === no; }).forEach(function (k) {
-      var s = document.createElement('span');
-      s.textContent = k.action.replace(/<br>/g, '');
-      if (drawn && k.action === drawn.action && k.value === drawn.value) s.className = 'is-drawn';
-      words.appendChild(s);
-    });
-    spot.classList.remove('is-show'); void spot.offsetWidth; spot.classList.add('is-show');
-    Orb.setTarget(c.hex, 0.4, 1.2, 1.5);
-  }
-
-  /* 引いたカードのボタン → カードの色の幕が画面を流れ、価値観マップへ運ぶ */
-  var curtain = document.getElementById('curtain');
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.EQMap = {
-    go: function (no, drawn) {
-      var c = COLORS8[no - 1];
-      var target = document.getElementById('map8');
-      if (reduce || !curtain) { target.scrollIntoView(); showSpot(no, drawn); return; }
-      curtain.style.setProperty('--cc', c.hex);
-      document.getElementById('curtain-label').textContent = c.title + '　—　' + c.desc;
-      curtain.className = 'curtain is-in';
-      setTimeout(function () {
-        var html = document.documentElement, prev = html.style.scrollBehavior;
-        html.style.scrollBehavior = 'auto';
-        window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 90);
-        html.style.scrollBehavior = prev;
-        showSpot(no, drawn);
-        setTimeout(function () { curtain.className = 'curtain is-out'; }, 350);
-        setTimeout(function () { curtain.className = 'curtain'; }, 1300);
-      }, 650);
-    },
-    show: showSpot
-  };
-  if (capParams.get('spot')) setTimeout(function () { showSpot(parseInt(capParams.get('spot'), 10), null); }, 300);
 
   /* ==========================================================
      5. ゲートの先にある道のり：内側に湾曲したギャラリー

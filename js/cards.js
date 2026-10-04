@@ -197,15 +197,6 @@
     area.classList.remove('is-show'); void area.offsetWidth; area.classList.add('is-show');
     document.getElementById('eqcc-notes').classList.add('is-show');
 
-    var no = COLOR_MAP[card.hex.toUpperCase()];
-    var info = (window.EQ_COLORS8 || [])[no - 1];
-    var cta = document.getElementById('eqcc-map-cta');
-    if (info && cta) {
-      cta.style.setProperty('--mc', card.hex);
-      cta.querySelector('span').textContent = '「' + info.title + '」の価値観を見る';
-      cta.onclick = function () { if (window.EQMap) window.EQMap.go(no, card); };
-      cta.classList.add('is-show');
-    }
     Orb.setTarget(card.hex, 0.55, 1.4, 1.6);
     Orb.boost(0.6);
     if (!/[?&]capture/.test(location.search)) setTimeout(function () { area.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }); }, 150);
@@ -215,7 +206,6 @@
     document.getElementById('eqcc-remaining').textContent = deck.length;
     document.getElementById('eqcc-drawn').classList.remove('is-show');
     document.getElementById('eqcc-notes').classList.remove('is-show');
-    document.getElementById('eqcc-map-cta').classList.remove('is-show');
     drawBtn.disabled = false; drawBtn.querySelector('span').textContent = 'カードを引く';
     Orb.reset(); Orb.restore();
   }
@@ -266,6 +256,5 @@
   if (drawParam) setTimeout(function () {
     var c = EQCC_CARDS[parseInt(drawParam, 10)] || EQCC_CARDS[0];
     show(c);
-    if (window.EQMap) window.EQMap.show(COLOR_MAP[c.hex.toUpperCase()], c);
   }, 400);
 })();
