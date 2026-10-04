@@ -53,14 +53,17 @@
 
   /* ---------- 点（ノード） ---------- */
   var R0 = 1.55;
-  var N = isSmall ? 240 : 430;
+  var N = isSmall ? 340 : 640;
   var base = [], drift = [], ember = [];
   var i, j;
   for (i = 0; i < N; i++) {
     var th = Math.random() * Math.PI * 2;
     var ph = Math.acos(Math.random() * 2 - 1);
-    var shell = Math.random() < 0.82;
-    var rr = R0 * (shell ? (0.9 + Math.random() * 0.16) : (0.45 + Math.random() * 0.4));
+    /* 外側の殻を細かく、中央にも点を増やして密度を上げる */
+    var roll = Math.random();
+    var rr = R0 * (roll < 0.58 ? (0.9 + Math.random() * 0.16)
+      : roll < 0.84 ? (0.55 + Math.random() * 0.33)
+        : (0.12 + Math.random() * 0.42));
     base.push(new THREE.Vector3(rr * Math.sin(ph) * Math.cos(th), rr * Math.sin(ph) * Math.sin(th), rr * Math.cos(ph)));
     drift.push({ sp: 0.25 + Math.random() * 0.6, ph1: Math.random() * 10, ph2: Math.random() * 10, amp: 0.5 + Math.random() });
     ember.push(Math.random() < 0.13);
@@ -81,7 +84,7 @@
   group.add(nodes);
 
   /* ---------- 線（近い点どうしを結ぶ） ---------- */
-  var LINK = R0 * 0.3, MAX_PER_NODE = 5;
+  var LINK = R0 * 0.25, MAX_PER_NODE = 8;
   var pairs = [], count = new Int16Array(N);
   for (i = 0; i < N; i++) {
     for (j = i + 1; j < N; j++) {
@@ -96,10 +99,21 @@
   lineGeo.setAttribute('position', new THREE.BufferAttribute(lpos, 3));
   lineGeo.setAttribute('color', new THREE.BufferAttribute(lcol, 3));
   var lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
-    vertexColors: true, transparent: true, opacity: 0.5, depthWrite: false
+    vertexColors: true, transparent: true, opacity: 0.42, depthWrite: false
   }));
   lines.renderOrder = 1;
   group.add(lines);
+
+  /* 光が触れている枠だけを、重ねてはっきり光らせる（光が当たっていない線は真っ黒＝加算で見えない） */
+  var gcol = new Float32Array(E * 6);
+  var glowGeo = new THREE.BufferGeometry();
+  glowGeo.setAttribute('position', new THREE.BufferAttribute(lpos, 3));
+  glowGeo.setAttribute('color', new THREE.BufferAttribute(gcol, 3));
+  var glowLines = new THREE.LineSegments(glowGeo, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  glowLines.renderOrder = 4;
+  group.add(glowLines);
 
   /* ---------- 網を巡る光 ---------- */
   var FLARES = isSmall ? 2 : 3;
@@ -107,17 +121,50 @@
   var flares = [];
   for (i = 0; i < FLARES; i++) {
     var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: flareTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.85 }));
-    s.scale.setScalar(1.5);
+    s.scale.setScalar(0.6);
     s.renderOrder = 3;
     s.userData = {
-      p: new THREE.Vector3(),
+      p: new THREE.Vector3(), prev: new THREE.Vector3(),
       a: Math.random() * Math.PI * 2, b: Math.random() * Math.PI * 2,
-      va: 0.22 + Math.random() * 0.25, vb: 0.16 + Math.random() * 0.2,
+      va: 0.5 + Math.random() * 0.45, vb: 0.36 + Math.random() * 0.4,
       r: R0 * (0.5 + Math.random() * 0.5), ph: Math.random() * 10
     };
     group.add(s);
     flares.push(s);
   }
+
+  /* ---------- 火花（光が動くたびに少し散る／ときどき小さく弾ける） ---------- */
+  var SPARKS = isSmall ? 90 : 160;
+  var spPos = new Float32Array(SPARKS * 3);
+  var spCol = new Float32Array(SPARKS * 3);
+  var spVel = [], spLife = new Float32Array(SPARKS), spMax = new Float32Array(SPARKS);
+  for (i = 0; i < SPARKS; i++) { spVel.push(new THREE.Vector3()); spLife[i] = 0; spPos[i * 3 + 1] = 9999; }
+  var sparkGeo = new THREE.BufferGeometry();
+  sparkGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3));
+  sparkGeo.setAttribute('color', new THREE.BufferAttribute(spCol, 3));
+  var sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({
+    size: isSmall ? 0.075 : 0.06, sizeAttenuation: true, vertexColors: true, blending: THREE.AdditiveBlending,
+    map: radialTexture([[0, 'rgba(255,255,255,1)'], [0.4, 'rgba(255,220,160,0.85)'], [1, 'rgba(255,180,90,0)']]),
+    transparent: true, depthWrite: false
+  }));
+  sparks.renderOrder = 5;
+  group.add(sparks);
+  var spNext = 0;
+  function emitSpark(at, power, color) {
+    var k = spNext; spNext = (spNext + 1) % SPARKS;
+    spPos[k * 3] = at.x; spPos[k * 3 + 1] = at.y; spPos[k * 3 + 2] = at.z;
+    spVel[k].set((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).normalize().multiplyScalar(0.25 + Math.random() * power);
+    spMax[k] = spLife[k] = 0.45 + Math.random() * 0.6;
+    spCol[k * 3] = color.r; spCol[k * 3 + 1] = color.g; spCol[k * 3 + 2] = color.b;
+  }
+
+  /* ときどき、網のどこかで光が小さく弾ける */
+  var burstTex = radialTexture([[0, 'rgba(255,255,255,0.95)'], [0.3, 'rgba(255,214,150,0.6)'], [1, 'rgba(255,170,80,0)']]);
+  var burst = new THREE.Sprite(new THREE.SpriteMaterial({ map: burstTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+  burst.renderOrder = 6;
+  burst.scale.setScalar(0.5);
+  group.add(burst);
+  var burstAt = 0, burstT = 0, burstWait = 1.5 + Math.random() * 2.5;
 
   /* ---------- うしろの霞（煙のような暗い雲） ---------- */
   var smokeTex = radialTexture([[0, 'rgba(40,44,58,0.26)'], [0.45, 'rgba(40,44,58,0.13)'], [1, 'rgba(40,44,58,0)']]);
@@ -216,8 +263,8 @@
   }
   window.addEventListener('resize', onResize);
 
-  /* ホバー時：旧版より28%穏やかな波立ち＋鼓動のように強まる細かな震え */
-  var CALM = 0.72;
+  /* ホバー時：旧版より39%穏やかな波立ち（28%＋さらに15%）＋細かな震え */
+  var CALM = 0.61;
   function setTarget(hex, amplitude, speed, frequency) {
     targetFlare = new THREE.Color(hex);
     target.amplitude = (amplitude == null ? 0.42 : amplitude) * CALM;
@@ -285,20 +332,58 @@
     rippleUniforms.uTime.value = t;
     rippleUniforms.uAgit.value = Math.min(1, Math.max(0, (now.amplitude - DEFAULT.amplitude) * 3));
 
-    /* 光の位置（網の中をゆっくり巡る） */
-    var beat = 0.45 + 0.55 * Math.pow(Math.abs(Math.sin(t * 3.1)), 6);
+    /* 光の位置（網の中を巡る）。明るさは一定にして、動いた分だけ火花を散らす */
+    var beat = 1;
     flares.forEach(function (f) {
       var u = f.userData;
-      u.a += delta * u.va * (0.6 + now.speed) * ms;
-      u.b += delta * u.vb * (0.6 + now.speed) * ms;
-      var rr = u.r * (0.85 + 0.15 * Math.sin(t * 0.7 + u.ph));
+      u.prev.copy(u.p);
+      u.a += delta * u.va * (0.8 + now.speed * 1.6) * ms;
+      u.b += delta * u.vb * (0.8 + now.speed * 1.6) * ms;
+      var rr = u.r * (0.85 + 0.15 * Math.sin(t * 0.9 + u.ph));
       u.p.set(rr * Math.sin(u.b) * Math.cos(u.a), rr * Math.sin(u.b) * Math.sin(u.a), rr * Math.cos(u.b));
       f.position.copy(u.p);
       f.material.color.copy(flareColor);
-      var sc = 0.85 + now.amplitude * 1.6 + now.tremble * 0.35 * beat;
-      f.scale.setScalar(sc);
-      f.material.opacity = 0.4 + 0.3 * beat;
+      f.scale.setScalar(0.5 + now.amplitude * 0.8);
+      f.material.opacity = 0.6;
+      /* 動いた距離に応じて、通り道に火花を置く */
+      var moved = u.p.distanceTo(u.prev);
+      if (!reduceMotion && moved > 0.012 && Math.random() < Math.min(0.9, moved * 14)) emitSpark(u.p, 0.5, flareColor);
     });
+
+    /* ときどき、どこかで光が小さく弾ける */
+    if (!reduceMotion) {
+      burstWait -= delta;
+      if (burstWait <= 0) {
+        burstWait = 1.6 + Math.random() * 3.4;
+        burstAt = Math.floor(Math.random() * N);
+        burstT = 0.55;
+        for (j = 0; j < 14; j++) {
+          tmp.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
+          emitSpark(tmp, 1.4, flareColor);
+        }
+      }
+      if (burstT > 0) {
+        burstT -= delta;
+        var bp = Math.max(0, burstT) / 0.55;
+        burst.position.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
+        burst.material.color.copy(flareColor);
+        burst.scale.setScalar(0.35 + (1 - bp) * 1.5);
+        burst.material.opacity = bp * 0.9;
+      } else burst.material.opacity = 0;
+    }
+
+    /* 火花：外へ散りながら消える */
+    for (i = 0; i < SPARKS; i++) {
+      if (spLife[i] <= 0) continue;
+      spLife[i] -= delta;
+      var k3 = i * 3, fade = Math.max(0, spLife[i] / spMax[i]);
+      spPos[k3] += spVel[i].x * delta; spPos[k3 + 1] += spVel[i].y * delta; spPos[k3 + 2] += spVel[i].z * delta;
+      spVel[i].multiplyScalar(0.94);
+      spCol[k3] = flareColor.r * fade; spCol[k3 + 1] = flareColor.g * fade * 0.95; spCol[k3 + 2] = flareColor.b * fade * 0.8;
+      if (spLife[i] <= 0) { spPos[k3 + 1] = 9999; spCol[k3] = spCol[k3 + 1] = spCol[k3 + 2] = 0; }
+    }
+    sparkGeo.attributes.position.needsUpdate = true;
+    sparkGeo.attributes.color.needsUpdate = true;
 
     /* 点：ゆっくり漂いながら、光に近いところが灯る */
     var amp = now.amplitude + pointerBoost;
@@ -336,9 +421,15 @@
       var fa = 0.55 + siz[a] * 0.6, fc = 0.55 + siz[c] * 0.6;
       lcol[o] = col[a * 3] * fa; lcol[o + 1] = col[a * 3 + 1] * fa; lcol[o + 2] = col[a * 3 + 2] * fa;
       lcol[o + 3] = col[c * 3] * fc; lcol[o + 4] = col[c * 3 + 1] * fc; lcol[o + 5] = col[c * 3 + 2] * fc;
+      /* 光が触れている枠だけ、上から加算で光らせる（触れていない枠は黒＝見えない） */
+      var ga = siz[a] * siz[a] * 1.5, gc = siz[c] * siz[c] * 1.5;
+      gcol[o] = flareColor.r * ga; gcol[o + 1] = flareColor.g * ga; gcol[o + 2] = flareColor.b * ga;
+      gcol[o + 3] = flareColor.r * gc; gcol[o + 4] = flareColor.g * gc; gcol[o + 5] = flareColor.b * gc;
     }
     lineGeo.attributes.position.needsUpdate = true;
     lineGeo.attributes.color.needsUpdate = true;
+    glowGeo.attributes.position.needsUpdate = true;
+    glowGeo.attributes.color.needsUpdate = true;
 
     /* 霞：ゆっくり漂う */
     smoke.forEach(function (sm) {
