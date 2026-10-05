@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261005d">
+<link rel="stylesheet" href="css/style.css?v=20261005e">
 <script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');if(/[?&]hover=1/.test(location.search))document.documentElement.classList.add('capture-hover');</script>
 </head>
 <body>
@@ -95,10 +95,9 @@
                   <animateTransform attributeName="gradientTransform" type="translate" from="-170 -170" to="170 170" dur="4.6s" begin="1.5s" repeatCount="indefinite"/>
                 </linearGradient>
               </defs>
-              <g class="emb" style="stroke:url(#eg-t)"><g class="emb__tilt">
-                <path d="M80 24 L136 126 H64"/>
-                <path d="M80 24 L24 126"/>
-                <path d="M80 64 L108 114 H52 Z" stroke-width="5.5"/></g>
+              <g class="emb" style="stroke:url(#eg-t)">
+                <path class="emb__dash" pathLength="100" d="M80 22 L138 126 H22 Z" stroke-dasharray="27 7 15 9 24 6 12 0"/>
+                <path class="emb__dash emb__dash--rev" pathLength="100" d="M80 50 L115 111 H45 Z" stroke-dasharray="30 10 20 12 18 10" stroke-width="5.5"/>
               </g>
             </svg>
             <p class="eqtri__kicker">02 ・ 理解する</p>
@@ -114,11 +113,8 @@
                 </linearGradient>
               </defs>
               <g class="emb" style="stroke:url(#eg-s)">
-                <g class="emb__tilt">
-                  <path d="M80 22 L138 80 L80 138"/>
-                  <path d="M80 22 L22 80 L56 114"/>
-                  <path d="M80 52 L108 80 L80 108 L52 80 Z" stroke-width="5.5"/>
-                </g>
+                <path class="emb__dash" pathLength="100" d="M80 20 L140 80 L80 140 L20 80 Z" stroke-dasharray="26 8 16 10 22 6 12 0"/>
+                <path class="emb__dash emb__dash--rev" pathLength="100" d="M80 42 L118 80 L80 118 L42 80 Z" stroke-dasharray="30 10 20 12 18 10" stroke-width="5.5"/>
               </g>
             </svg>
             <p class="eqtri__kicker">03 ・ 選ぶ</p>
@@ -140,7 +136,7 @@
         <p class="lead reveal">EQ（感情を理解し、活かす力）は、知識として覚えるより、<br class="pc">自分の心で確かめたときに身につきます。<br class="pc">EQ Gateには、すぐに始められる3つの体験があります。</p>
       </div>
       <div class="folders">
-        <a class="fcard reveal" href="experience.html" style="--c:#6a52d9;--c2:#cdbfff" data-orb-hover="#8b5cf6">
+        <a class="fcard reveal" href="experience.html" style="--c:#3f78d0;--c2:#b8d0f5" data-orb-hover="#4a8ae0">
           <div class="fcard__top">
             <span class="fcard__tab" aria-hidden="true"></span>
             <img class="fcard__img" src="images/photos/scene.jpg" alt="時計の文字盤と地球が渦を巻く、時の流れのイメージ" loading="lazy">
@@ -153,7 +149,7 @@
             <span class="fcard__go">体験ワークをはじめる</span>
           </div>
         </a>
-        <a class="fcard reveal" href="#work" style="--c:#2f8540;--c2:#b9e3b0;--d:.12s" data-orb-hover="#3aa55a">
+        <a class="fcard reveal" href="#work" style="--c:#d9772b;--c2:#ffcf9f;--d:.12s" data-orb-hover="#e8832a">
           <div class="fcard__top">
             <span class="fcard__tab" aria-hidden="true"></span>
             <img class="fcard__img" src="images/photos/write.jpg" alt="琥珀色に揺れる水面をのぞきこんだ写真" loading="lazy">
@@ -166,7 +162,7 @@
             <span class="fcard__go">ワークをはじめる</span>
           </div>
         </a>
-        <a class="fcard reveal" href="#cards" style="--c:#d98a2b;--c2:#ffd9a8;--d:.24s" data-orb-hover="#e8832a">
+        <a class="fcard reveal" href="#cards" style="--c:#7a5cd6;--c2:#d3c6ff;--d:.24s" data-orb-hover="#8b5cf6">
           <div class="fcard__top">
             <span class="fcard__tab" aria-hidden="true"></span>
             <img class="fcard__img" src="images/photos/iceberg.jpg" alt="海に浮かぶ氷山と、EQコアカードの束" loading="lazy">
@@ -445,11 +441,11 @@
       <div class="orbit reveal" id="orbit" aria-label="EQを学ぶと起きる5つの変化。ドラッグで回せます">
         <div class="orbit__stage" id="orbit-stage">
           <ul class="orbit__ring changes" id="orbit-ring">
-            <li><span class="orbit__no">01</span><span class="orbit__txt">自分の感情や考え方を客観的に捉えられる</span></li>
-            <li><span class="orbit__no">02</span><span class="orbit__txt">相手の立場を理解しやすくなる</span></li>
-            <li><span class="orbit__no">03</span><span class="orbit__txt">感情に流されず、より良い選択ができる</span></li>
-            <li><span class="orbit__no">04</span><span class="orbit__txt">コミュニケーションや人間関係が変わる</span></li>
-            <li><span class="orbit__no">05</span><span class="orbit__txt">リーダーシップやチームづくりに活かせる</span></li>
+            <li><span class="orbit__no">01</span><img class="orbit__ic" src="images/eq-icons/ic-self.png" alt="" loading="lazy"><span class="orbit__txt">自分の感情や考え方を客観的に捉えられる</span></li>
+            <li><span class="orbit__no">02</span><img class="orbit__ic" src="images/eq-icons/ic-other.png" alt="" loading="lazy"><span class="orbit__txt">相手の立場を理解しやすくなる</span></li>
+            <li><span class="orbit__no">03</span><img class="orbit__ic" src="images/eq-icons/ic-choice.png" alt="" loading="lazy"><span class="orbit__txt">感情に流されず、より良い選択ができる</span></li>
+            <li><span class="orbit__no">04</span><img class="orbit__ic" src="images/eq-icons/ic-comm.png" alt="" loading="lazy"><span class="orbit__txt">コミュニケーションや人間関係が変わる</span></li>
+            <li><span class="orbit__no">05</span><img class="orbit__ic" src="images/eq-icons/ic-lead.png" alt="" loading="lazy"><span class="orbit__txt">リーダーシップやチームづくりに活かせる</span></li>
           </ul>
         </div>
         <div class="orbit__dots" id="orbit-dots" role="tablist" aria-label="変化を選ぶ"></div>
@@ -529,10 +525,10 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/orb.js?v=20261005d"></script>
-<script src="js/common.js?v=20261005d"></script>
-<script src="js/main.js?v=20261005d"></script>
-<script src="js/cards.js?v=20261005d"></script>
-<script src="js/sections.js?v=20261005d"></script>
+<script src="js/orb.js?v=20261005e"></script>
+<script src="js/common.js?v=20261005e"></script>
+<script src="js/main.js?v=20261005e"></script>
+<script src="js/cards.js?v=20261005e"></script>
+<script src="js/sections.js?v=20261005e"></script>
 </body>
 </html>

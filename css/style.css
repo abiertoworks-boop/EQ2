@@ -837,3 +837,25 @@ body{
   .emb__spin,.emb__tilt{ animation:none; }
 }
 .capture .emb__spin,.capture .emb__tilt{ animation:none !important; }
+
+/* ==========================================================================
+   2026-10-05e：△と□も、〇のように「切れ目のある線」が輪郭をまわる動きに／回るカードにアイコン
+   ========================================================================== */
+.emb__dash{ animation:embDash 22s linear infinite; }
+.emb__dash--rev{ animation-duration:16s; animation-direction:reverse; }
+@keyframes embDash{ to{ stroke-dashoffset:-100; } }
+.eqtri__card:hover .emb__dash{ animation-duration:8s; }
+.eqtri__card:hover .emb__dash--rev{ animation-duration:6s; }
+@media (prefers-reduced-motion:reduce){ .emb__dash{ animation:none; } }
+.capture .emb__dash{ animation:none !important; }
+
+.orbit__ic{ display:block; width:var(--ic,128px); height:var(--ic,128px); object-fit:contain; align-self:center; margin:.3rem 0 auto; pointer-events:none; animation:orbitFloat 5.5s ease-in-out infinite; }
+.js .orbit__ring li:nth-child(2n) .orbit__ic{ animation-delay:-1.8s; }
+.js .orbit__ring li:nth-child(3n) .orbit__ic{ animation-delay:-3.4s; }
+@keyframes orbitFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+.js .orbit__ring{ --ic:132px; }
+.js .orbit__ring li{ position:absolute; }
+.orbit__no{ position:absolute; top:1.1rem; left:1.4rem; }
+.js .orbit__ring li .orbit__txt{ font-size:1.12rem; }
+@media (max-width:700px){ .js .orbit__ring{ --ic:96px; } .js .orbit__ring li .orbit__txt{ font-size:.98rem; } }
+.capture .orbit__ic{ animation:none; }
