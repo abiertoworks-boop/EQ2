@@ -1,7 +1,8 @@
 /* ==========================================================================
    感情のコア — 点と線のネットワーク球体（参考動画 2026-10-04 の動き）
    ・暗い点が球状に散らばり、近いもの同士が細い線でつながる
-   ・その網の中を金色の光がゆっくり巡り、通ったところの点と線が灯る
+   ・小さな光が球体の手前にも奥にも立体的に巡り、通ったところの点と線が灯る
+   ・外枠のワイヤーがランダムに熱せられ、オレンジに燃えて光る／ときどき本物の炎が上がり、オレンジの火花が散る
    ・中央に青白い光の玉。ときどき中央から外へ青白い稲妻が走る
    ・足元に水面の波紋
    ・枠にホバーすると、光の色がその色に変わり、網全体が強く波立つ（穏やかな揺れ＋細かな震え）
@@ -116,26 +117,77 @@
   glowLines.renderOrder = 4;
   group.add(glowLines);
 
-  /* ---------- 網を巡る光 ---------- */
+  /* ---------- 外枠のワイヤーが、ランダムに熱せられて光る ---------- */
+  var heat = new Float32Array(E), nodeH = new Float32Array(N), edgesOf = [];
+  for (i = 0; i < N; i++) edgesOf.push([]);
+  for (i = 0; i < E; i++) { edgesOf[pairs[i * 2]].push(i); edgesOf[pairs[i * 2 + 1]].push(i); }
+  var isShell = [];
+  for (i = 0; i < N; i++) isShell.push(base[i].length() > R0 * 0.88);
+  var shellEdges = [];
+  for (i = 0; i < E; i++) if (isShell[pairs[i * 2]] && isShell[pairs[i * 2 + 1]]) shellEdges.push(i);
+  var igQ = [], heatWait = 0.2;
+  var heatTex = radialTexture([[0, 'rgba(255,196,120,0.95)'], [0.3, 'rgba(255,120,30,0.65)'], [1, 'rgba(255,90,10,0)']]);
+  var HG = 10, heatGlows = [], heatNext = 0;
+  for (i = 0; i < HG; i++) {
+    var hs = new THREE.Sprite(new THREE.SpriteMaterial({ map: heatTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+    hs.renderOrder = 3; hs.scale.setScalar(0.5);
+    hs.userData = { life: 0, max: 1, s: 0.5 };
+    group.add(hs); heatGlows.push(hs);
+  }
+
+  /* 外殻のワイヤー1本を熱し、隣のワイヤーへ数本ぶん燃え広がらせる */
+  function igniteCluster(now0) {
+    if (!shellEdges.length) return;
+    var e0 = shellEdges[Math.floor(Math.random() * shellEdges.length)];
+    var seen = {}; seen[e0] = 1;
+    igQ.push({ e: e0, at: now0, v: 1 });
+    var frontier = [e0], hop = 0, maxHop = 3 + Math.floor(Math.random() * 3);
+    while (hop < maxHop && frontier.length) {
+      hop++;
+      var nf = [];
+      for (var fi = 0; fi < frontier.length; fi++) {
+        var ef = frontier[fi];
+        for (var side = 0; side < 2; side++) {
+          var lst = edgesOf[pairs[ef * 2 + side]];
+          for (var li = 0; li < lst.length; li++) {
+            var e2 = lst[li];
+            if (seen[e2] || !(isShell[pairs[e2 * 2]] && isShell[pairs[e2 * 2 + 1]]) || Math.random() > 0.66) continue;
+            seen[e2] = 1; nf.push(e2);
+            igQ.push({ e: e2, at: now0 + hop * 0.07, v: Math.max(0.35, 1 - hop * 0.15) });
+          }
+        }
+      }
+      frontier = nf;
+    }
+    var hg = heatGlows[heatNext]; heatNext = (heatNext + 1) % HG;
+    var hn = pairs[e0 * 2];
+    hg.position.set(pos[hn * 3], pos[hn * 3 + 1], pos[hn * 3 + 2]);
+    hg.userData.life = hg.userData.max = 1.1 + Math.random() * 0.6;
+    hg.userData.s = 0.55 + Math.random() * 0.4;
+  }
+
+  /* ---------- 網を巡る光（小さな光。球体の手前にも奥にも、立体的に動く） ---------- */
   var FLARES = isSmall ? 2 : 3;
   var flareTex = radialTexture([[0, 'rgba(255,255,255,0.95)'], [0.25, 'rgba(255,196,120,0.75)'], [0.6, 'rgba(255,150,60,0.25)'], [1, 'rgba(255,140,60,0)']]);
   var flares = [];
   for (i = 0; i < FLARES; i++) {
     var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: flareTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.85 }));
-    s.scale.setScalar(0.6);
+    s.scale.setScalar(0.3);
     s.renderOrder = 3;
     s.userData = {
       p: new THREE.Vector3(), prev: new THREE.Vector3(),
-      a: Math.random() * Math.PI * 2, b: Math.random() * Math.PI * 2,
-      va: 0.5 + Math.random() * 0.45, vb: 0.36 + Math.random() * 0.4,
-      r: R0 * (0.5 + Math.random() * 0.5), ph: Math.random() * 10
+      /* x・y・z それぞれが別の速さで往復するので、球体の中を斜めに貫いて奥へも手前へも動く */
+      wx: 0.34 + Math.random() * 0.3, wy: 0.41 + Math.random() * 0.3, wz: 0.29 + Math.random() * 0.3,
+      px: Math.random() * 6.28, py: Math.random() * 6.28, pz: Math.random() * 6.28,
+      ax: R0 * (0.85 + Math.random() * 0.15), ay: R0 * (0.85 + Math.random() * 0.15), az: R0 * (0.85 + Math.random() * 0.15),
+      T: Math.random() * 20, depth: 0
     };
     group.add(s);
     flares.push(s);
   }
 
-  /* ---------- 火花（光が動くたびに少し散る／ときどき小さく弾ける） ---------- */
-  var SPARKS = isSmall ? 140 : 260;
+  /* ---------- 火花（オレンジ色。光が動くたびに少し散る／炎の上がるときに散る） ---------- */
+  var SPARKS = isSmall ? 160 : 300;
   var spPos = new Float32Array(SPARKS * 3);
   var spCol = new Float32Array(SPARKS * 3);
   var spVel = [], spLife = new Float32Array(SPARKS), spMax = new Float32Array(SPARKS), spBase = [];
@@ -144,32 +196,81 @@
   sparkGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3));
   sparkGeo.setAttribute('color', new THREE.BufferAttribute(spCol, 3));
   var sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({
-    size: isSmall ? 0.075 : 0.06, sizeAttenuation: true, vertexColors: true, blending: THREE.AdditiveBlending,
-    map: radialTexture([[0, 'rgba(255,255,255,1)'], [0.4, 'rgba(255,220,160,0.85)'], [1, 'rgba(255,180,90,0)']]),
+    size: isSmall ? 0.085 : 0.07, sizeAttenuation: true, vertexColors: true, blending: THREE.AdditiveBlending,
+    map: radialTexture([[0, 'rgba(255,214,150,1)'], [0.35, 'rgba(255,140,40,0.9)'], [1, 'rgba(255,90,10,0)']]),
     transparent: true, depthWrite: false
   }));
   sparks.renderOrder = 5;
   group.add(sparks);
   var spNext = 0;
-  function emitSpark(at, power, color) {
+  var SPARK_ORANGES = [new THREE.Color('#ff6a00'), new THREE.Color('#ff8a1a'), new THREE.Color('#ffa21f')];
+  function emitSpark(at, power) {
     var k = spNext; spNext = (spNext + 1) % SPARKS;
     spPos[k * 3] = at.x; spPos[k * 3 + 1] = at.y; spPos[k * 3 + 2] = at.z;
     spVel[k].set((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).normalize().multiplyScalar(0.25 + Math.random() * power);
-    spMax[k] = spLife[k] = 0.45 + Math.random() * 0.6;
-    spBase[k].copy(color);
-    spCol[k * 3] = color.r; spCol[k * 3 + 1] = color.g; spCol[k * 3 + 2] = color.b;
+    spMax[k] = spLife[k] = 0.45 + Math.random() * 0.7;
+    var oc = SPARK_ORANGES[Math.floor(Math.random() * SPARK_ORANGES.length)];
+    spBase[k].copy(oc);
+    spCol[k * 3] = oc.r; spCol[k * 3 + 1] = oc.g; spCol[k * 3 + 2] = oc.b;
   }
 
-  /* ときどき、網のどこかで光が小さく弾ける */
-  var burstTex = radialTexture([[0, 'rgba(255,255,255,0.95)'], [0.3, 'rgba(255,214,150,0.6)'], [1, 'rgba(255,170,80,0)']]);
-  var burst = new THREE.Sprite(new THREE.SpriteMaterial({ map: burstTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
-  burst.renderOrder = 6;
-  burst.scale.setScalar(0.5);
-  group.add(burst);
-  var burstAt = 0, burstT = 0, burstWait = 0.8 + Math.random() * 1.4;
+  /* ---------- ときどき、網のどこかで本物の炎が上がる ---------- */
+  var FIRE_N = 6;
+  var fireVert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }';
+  var fireFrag = [
+    'uniform float uTime; uniform float uLife; uniform float uSeed; varying vec2 vUv;',
+    'float hash(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p,p+45.32); return fract(p.x*p.y); }',
+    'float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);',
+    '  return mix(mix(hash(i),hash(i+vec2(1.0,0.0)),f.x), mix(hash(i+vec2(0.0,1.0)),hash(i+vec2(1.0,1.0)),f.x), f.y); }',
+    'float fbm(vec2 p){ float v=0.0, a=0.5; for(int k=0;k<4;k++){ v+=a*noise(p); p*=2.03; a*=0.5; } return v; }',
+    'void main(){',
+    '  float life = uLife;',
+    '  float hs = mix(0.4, 1.0, smoothstep(0.0, 0.3, life));',
+    '  float y = vUv.y / hs;',
+    '  float x = (vUv.x - 0.5) * 2.0;',
+    '  float t = uTime * 2.6;',
+    '  float n1 = fbm(vec2(x*1.6 + uSeed, y*2.2 - t));',
+    '  x += (n1 - 0.5) * (0.25 + 1.15*y);',
+    '  float w = 0.56 * pow(max(1.0 - y, 0.0), 1.1) * (0.55 + 0.45*smoothstep(0.0, 0.2, y));',
+    '  float d = abs(x) / max(w, 0.02);',
+    '  float shape = (1.0 - smoothstep(0.55, 1.0, d)) * smoothstep(0.0, 0.05, vUv.y) * step(y, 1.0);',
+    '  float n2 = fbm(vec2(x*3.4 + uSeed*1.7, y*3.8 - t*1.5));',
+    '  float inten = clamp(shape * (0.35 + 1.0*n2) * (1.0 - y*0.7), 0.0, 1.0);',
+    '  vec3 c = mix(vec3(0.82,0.10,0.02), vec3(1.0,0.42,0.03), smoothstep(0.08, 0.38, inten));',
+    '  c = mix(c, vec3(1.0,0.74,0.16), smoothstep(0.38, 0.7, inten));',
+    '  c = mix(c, vec3(1.0,0.95,0.6), smoothstep(0.75, 1.0, inten));',
+    '  float fadeL = smoothstep(0.0, 0.1, life) * (1.0 - smoothstep(0.55, 1.0, life));',
+    '  gl_FragColor = vec4(c, smoothstep(0.04, 0.3, inten) * fadeL * 0.96);',
+    '}'
+  ].join('\n');
+  var fires = [], fireNext = 0;
+  for (i = 0; i < FIRE_N; i++) {
+    var fm = new THREE.Mesh(new THREE.PlaneGeometry(1, 1.35), new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uLife: { value: 0 }, uSeed: { value: Math.random() * 20 } },
+      vertexShader: fireVert, fragmentShader: fireFrag,
+      transparent: true, depthWrite: false
+    }));
+    fm.visible = false; fm.renderOrder = 7; fm.frustumCulled = false;
+    scene.add(fm);
+    fires.push({ m: fm, life: 0, max: 1, at: new THREE.Vector3(), dx: 0, s: 1 });
+  }
+  var burstAt = 0, burstWait = 0.8 + Math.random() * 1.2;
+  var burstDemo = params.has('burst'), fireDemo = params.has('fire');
+  if (fireDemo) burstWait = 0.05;
+  function igniteFire(local) {
+    for (var t3 = 0; t3 < 3; t3++) {
+      var f = fires[fireNext]; fireNext = (fireNext + 1) % FIRE_N;
+      f.life = f.max = 1.0 + Math.random() * 0.5;
+      f.at.copy(local);
+      f.dx = (t3 - 1) * 0.2 + (Math.random() - 0.5) * 0.06;
+      f.s = t3 === 1 ? 1 : 0.62 + Math.random() * 0.12;
+      f.m.material.uniforms.uSeed.value = Math.random() * 30;
+      f.m.visible = true;
+    }
+    for (var q = 0; q < 34; q++) emitSpark(local, 2.3);
+  }
 
   /* ---------- 中央の青白い光の玉 ---------- */
-  var CORE_BLUE = new THREE.Color('#9fd8ff');
   var core = new THREE.Sprite(new THREE.SpriteMaterial({
     map: radialTexture([[0, 'rgba(255,255,255,1)'], [0.18, 'rgba(226,245,255,0.9)'], [0.45, 'rgba(150,210,255,0.45)'], [1, 'rgba(120,190,255,0)']]),
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.9
@@ -178,47 +279,92 @@
   core.renderOrder = 3;
   group.add(core);
 
-  /* ---------- 中央から外へ走る、青白い稲妻 ---------- */
-  var BOLTS = 5, SEG = 7;
-  var bpos = new Float32Array(BOLTS * SEG * 6);
-  var bcol = new Float32Array(BOLTS * SEG * 6);
-  var boltGeo = new THREE.BufferGeometry();
-  boltGeo.setAttribute('position', new THREE.BufferAttribute(bpos, 3));
-  boltGeo.setAttribute('color', new THREE.BufferAttribute(bcol, 3));
-  var bolts = new THREE.LineSegments(boltGeo, new THREE.LineBasicMaterial({
-    vertexColors: true, transparent: true, opacity: 1, depthWrite: false
-  }));
-  bolts.renderOrder = 6;
-  group.add(bolts);
+  /* ---------- 中央から外へ走る、太い青白い稲妻（カメラへ向けた帯で描く） ---------- */
+  var BOLT_SEGS = 110;
+  function makeBoltLayer(color, opacity, widthMul, order) {
+    var geo = new THREE.BufferGeometry();
+    var p = new Float32Array(BOLT_SEGS * 12);
+    var idx = new Uint16Array(BOLT_SEGS * 6);
+    for (var s2 = 0; s2 < BOLT_SEGS; s2++) {
+      var b0 = s2 * 4, o2 = s2 * 6;
+      idx[o2] = b0; idx[o2 + 1] = b0 + 1; idx[o2 + 2] = b0 + 2; idx[o2 + 3] = b0 + 2; idx[o2 + 4] = b0 + 1; idx[o2 + 5] = b0 + 3;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(p, 3));
+    geo.setIndex(new THREE.BufferAttribute(idx, 1));
+    geo.setDrawRange(0, 0);
+    var mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: opacity, depthWrite: false, side: THREE.DoubleSide }));
+    mesh.renderOrder = order; mesh.frustumCulled = false;
+    group.add(mesh);
+    return { geo: geo, p: p, mesh: mesh, wm: widthMul, op: opacity };
+  }
+  var boltLayers = [
+    makeBoltLayer(0x7ec4ff, 0.3, 3.4, 6),
+    makeBoltLayer(0x2a7bff, 0.9, 1.35, 7),
+    makeBoltLayer(0xe9f7ff, 1, 0.5, 8)
+  ];
+  var boltSegs = [];
   var boltDemo = params.has('bolt');
-  var boltT = 0, boltWait = boltDemo ? 0.2 : 2 + Math.random() * 2.5, boltLen = 0;
+  var boltT = 0, boltWait = boltDemo ? 0.2 : 1 + Math.random() * 1.8;
+  var viewLocal = new THREE.Vector3(), segDir = new THREE.Vector3(), segSide = new THREE.Vector3(), segTo = new THREE.Vector3();
 
   function fireBolts() {
-    boltLen = 0;
-    var n = 3 + Math.floor(Math.random() * 3);
-    for (var bi = 0; bi < n && bi < BOLTS; bi++) {
+    boltSegs = [];
+    var n = 4 + Math.floor(Math.random() * 3);
+    for (var bi = 0; bi < n; bi++) {
       var node = Math.floor(Math.random() * N);
       var ex = pos[node * 3], ey = pos[node * 3 + 1], ez = pos[node * 3 + 2];
-      var px = 0, py = 0, pz = 0;
-      for (var s = 1; s <= SEG; s++) {
-        var f = s / SEG;
-        var spread = 0.3 * (1 - Math.abs(f - 0.5) * 1.4);
+      var SEG = 8, px = 0, py = 0, pz = 0, mids = [];
+      for (var s3 = 1; s3 <= SEG; s3++) {
+        var f = s3 / SEG;
+        var spread = 0.34 * (1 - Math.abs(f - 0.5) * 1.3);
         var nx2 = ex * f + (Math.random() - 0.5) * spread;
         var ny2 = ey * f + (Math.random() - 0.5) * spread;
         var nz2 = ez * f + (Math.random() - 0.5) * spread;
-        var o = boltLen * 6;
-        bpos[o] = px; bpos[o + 1] = py; bpos[o + 2] = pz;
-        bpos[o + 3] = nx2; bpos[o + 4] = ny2; bpos[o + 5] = nz2;
-        boltLen++;
+        boltSegs.push([px, py, pz, nx2, ny2, nz2, 1 - f * 0.45]);
+        if (s3 > 2 && s3 < SEG) mids.push([nx2, ny2, nz2]);
         px = nx2; py = ny2; pz = nz2;
       }
-      /* 稲妻の先が触れた点から、火花を散らす */
+      /* 途中から細い枝が分かれる */
+      for (var br2 = 0; br2 < 2 && mids.length; br2++) {
+        var m = mids[Math.floor(Math.random() * mids.length)];
+        var qx = m[0], qy = m[1], qz = m[2];
+        for (var s4 = 0; s4 < 3; s4++) {
+          var rx = qx + (Math.random() - 0.5) * 0.3, ry = qy + (Math.random() - 0.5) * 0.3, rz = qz + (Math.random() - 0.5) * 0.3;
+          boltSegs.push([qx, qy, qz, rx, ry, rz, 0.5 - s4 * 0.1]);
+          qx = rx; qy = ry; qz = rz;
+        }
+      }
+      /* 稲妻の先が触れた点から、オレンジの火花を散らす */
       tmp.set(ex, ey, ez);
-      for (var q = 0; q < 6; q++) emitSpark(tmp, 1.1, CORE_BLUE);
+      for (var q = 0; q < 8; q++) emitSpark(tmp, 1.3);
     }
-    boltGeo.setDrawRange(0, boltLen * 2);
-    boltGeo.attributes.position.needsUpdate = true;
-    boltT = 0.42;
+    if (boltSegs.length > BOLT_SEGS) boltSegs.length = BOLT_SEGS;
+    boltT = 0.5;
+  }
+
+  /* 稲妻の帯を、いまのカメラの向きに合わせて作り直す */
+  function updateBolts(flick) {
+    viewLocal.copy(camera.position);
+    group.worldToLocal(viewLocal);
+    var segN = boltSegs.length;
+    for (var li2 = 0; li2 < boltLayers.length; li2++) {
+      var L = boltLayers[li2], P = L.p;
+      for (var si = 0; si < segN; si++) {
+        var sg = boltSegs[si];
+        segDir.set(sg[3] - sg[0], sg[4] - sg[1], sg[5] - sg[2]);
+        segTo.copy(viewLocal).sub(segSide.set(sg[0], sg[1], sg[2]));
+        segSide.crossVectors(segDir, segTo).normalize();
+        var hw = 0.027 * sg[6] * L.wm;
+        var o3 = si * 12;
+        P[o3] = sg[0] + segSide.x * hw; P[o3 + 1] = sg[1] + segSide.y * hw; P[o3 + 2] = sg[2] + segSide.z * hw;
+        P[o3 + 3] = sg[0] - segSide.x * hw; P[o3 + 4] = sg[1] - segSide.y * hw; P[o3 + 5] = sg[2] - segSide.z * hw;
+        P[o3 + 6] = sg[3] + segSide.x * hw; P[o3 + 7] = sg[4] + segSide.y * hw; P[o3 + 8] = sg[5] + segSide.z * hw;
+        P[o3 + 9] = sg[3] - segSide.x * hw; P[o3 + 10] = sg[4] - segSide.y * hw; P[o3 + 11] = sg[5] - segSide.z * hw;
+      }
+      L.geo.attributes.position.needsUpdate = true;
+      L.geo.setDrawRange(0, segN * 6);
+      L.mesh.material.opacity = Math.min(1, L.op * flick);
+    }
   }
 
   /* ---------- うしろのやわらかな光 ---------- */
@@ -351,8 +497,8 @@
   }
 
   /* ---------- 毎フレームの計算 ---------- */
-  var tmp = new THREE.Vector3();
-  var cA = new THREE.Color(), cB = new THREE.Color();
+  var tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
+  var cA = new THREE.Color(), cB = new THREE.Color(), cH = new THREE.Color();
   var depthNow = 0;
   var clock = new THREE.Clock();
   var elapsed = capture ? 6 : 0;
@@ -372,45 +518,91 @@
     rippleUniforms.uTime.value = t;
     rippleUniforms.uAgit.value = Math.min(1, Math.max(0, (now.amplitude - DEFAULT.amplitude) * 3));
 
-    /* 光の位置（網の中を巡る）。明るさは一定にして、動いた分だけ火花を散らす */
+    /* 光の位置：x・y・zが別々の速さで往復し、球体の手前から奥へ貫いて動く。小さな光にして、触れたワイヤーだけが灯る */
     var beat = 1;
+    var gz = group.position.z;
     flares.forEach(function (f) {
       var u = f.userData;
       u.prev.copy(u.p);
-      u.a += delta * u.va * (0.8 + now.speed * 1.6) * ms;
-      u.b += delta * u.vb * (0.8 + now.speed * 1.6) * ms;
-      var rr = u.r * (0.85 + 0.15 * Math.sin(t * 0.9 + u.ph));
-      u.p.set(rr * Math.sin(u.b) * Math.cos(u.a), rr * Math.sin(u.b) * Math.sin(u.a), rr * Math.cos(u.b));
+      u.T += delta * (0.8 + now.speed * 1.6) * ms;
+      u.p.set(u.ax * Math.sin(u.T * u.wx + u.px), u.ay * Math.sin(u.T * u.wy + u.py), u.az * Math.sin(u.T * u.wz + u.pz));
+      var len = u.p.length();
+      if (len > R0 * 0.98) u.p.multiplyScalar(R0 * 0.98 / len);
       f.position.copy(u.p);
       f.material.color.copy(flareColor);
-      f.scale.setScalar(0.5 + now.amplitude * 0.8);
-      f.material.opacity = 0.6;
-      /* 動いた距離に応じて、通り道に火花を置く */
+      /* 奥にあるほど小さく・淡く、ワイヤーの後ろに回り込んで見える */
+      tmp2.copy(u.p).applyMatrix4(group.matrixWorld);
+      var dz = Math.max(-1, Math.min(1, (tmp2.z - gz) / R0));
+      u.depth += (dz - u.depth) * 0.2;
+      var near = (u.depth + 1) / 2;
+      f.scale.setScalar((0.24 + now.amplitude * 0.3) * (0.62 + 0.55 * near));
+      f.material.opacity = 0.35 + 0.5 * near;
+      f.renderOrder = u.depth < 0 ? 0 : 3;
+      /* 動いた距離に応じて、通り道にオレンジの火花を置く */
       var moved = u.p.distanceTo(u.prev);
-      if (!reduceMotion && moved > 0.012 && Math.random() < Math.min(0.9, moved * 14)) emitSpark(u.p, 0.5, flareColor);
+      if (!reduceMotion && moved > 0.012 && Math.random() < Math.min(0.9, moved * 14)) emitSpark(u.p, 0.5);
     });
 
-    /* ときどき、どこかで光が小さく弾ける */
+    /* 外枠のワイヤーを、ランダムに熱する（熱は広がりながら冷めていく） */
+    if (!reduceMotion) {
+      heatWait -= delta;
+      if (heatWait <= 0) {
+        heatWait = 0.18 + Math.random() * 0.4;
+        igniteCluster(elapsed);
+        if (Math.random() < 0.35) igniteCluster(elapsed + 0.05);
+      }
+    }
+    for (i = igQ.length - 1; i >= 0; i--) {
+      var ig = igQ[i];
+      if (elapsed >= ig.at) { if (ig.v > heat[ig.e]) heat[ig.e] = ig.v; igQ.splice(i, 1); }
+    }
+    var cool = Math.exp(-delta * 1.35);
+    for (i = 0; i < N; i++) nodeH[i] = 0;
+    for (i = 0; i < E; i++) {
+      var hv = heat[i] * cool;
+      if (hv < 0.01) hv = 0;
+      heat[i] = hv;
+      if (hv > 0) {
+        var ha0 = pairs[i * 2], hc0 = pairs[i * 2 + 1];
+        if (hv > nodeH[ha0]) nodeH[ha0] = hv;
+        if (hv > nodeH[hc0]) nodeH[hc0] = hv;
+      }
+    }
+    heatGlows.forEach(function (hg) {
+      var u = hg.userData;
+      if (u.life > 0) {
+        u.life -= delta;
+        var hp = Math.max(0, u.life) / u.max;
+        hg.material.opacity = Math.min(1, hp * 1.6) * 0.8;
+        hg.scale.setScalar(u.s * (0.7 + (1 - hp) * 0.7));
+      } else hg.material.opacity = 0;
+    });
+
+    /* ときどき、どこかで炎が上がる */
     if (!reduceMotion) {
       burstWait -= delta;
       if (burstWait <= 0) {
-        burstWait = 0.7 + Math.random() * 1.5;
+        burstWait = fireDemo ? 1e9 : burstDemo ? 0.6 : 0.9 + Math.random() * 1.6;
         burstAt = Math.floor(Math.random() * N);
-        burstT = 0.7;
-        for (j = 0; j < 30; j++) {
-          tmp.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
-          emitSpark(tmp, 2.1, flareColor);
-        }
+        tmp.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
+        igniteFire(tmp);
       }
-      if (burstT > 0) {
-        burstT -= delta;
-        var bp = Math.max(0, burstT) / 0.7;
-        burst.position.set(pos[burstAt * 3], pos[burstAt * 3 + 1], pos[burstAt * 3 + 2]);
-        burst.material.color.copy(flareColor);
-        burst.scale.setScalar(0.5 + (1 - bp) * 3.2);
-        burst.material.opacity = bp;
-      } else burst.material.opacity = 0;
     }
+    /* 炎：ノイズで揺らめかせ、カメラへ向けて、少しずつ立ちのぼらせる */
+    var gs = group.scale.x;
+    fires.forEach(function (fr) {
+      if (!fr.m.visible) return;
+      if (!fireDemo) fr.life -= delta;
+      if (fr.life <= 0) { fr.m.visible = false; return; }
+      var p = fireDemo ? 0.4 : 1 - fr.life / fr.max;
+      var u = fr.m.material.uniforms;
+      u.uTime.value = elapsed; u.uLife.value = p;
+      tmp2.copy(fr.at); group.localToWorld(tmp2);
+      var h = 1.35 * fr.s * gs, w = 1.0 * fr.s * gs;
+      fr.m.quaternion.copy(camera.quaternion);
+      fr.m.scale.set(w, h, 1);
+      fr.m.position.set(tmp2.x + fr.dx * gs, tmp2.y + h * 0.5 - 0.05 + p * 0.35 * gs, tmp2.z + 0.05);
+    });
 
     /* 火花：外へ散りながら消える */
     for (i = 0; i < SPARKS; i++) {
@@ -425,10 +617,10 @@
     sparkGeo.attributes.position.needsUpdate = true;
     sparkGeo.attributes.color.needsUpdate = true;
 
-    /* 点：ゆっくり漂いながら、光に近いところが灯る */
+    /* 点：ゆっくり漂いながら、光に近いところと熱せられたところが灯る */
     var amp = now.amplitude + pointerBoost;
     var quiver = now.tremble * 0.05 * beat;
-    var sigma2 = 0.42 * 0.42;
+    var sigma2 = 0.3 * 0.3;
     for (i = 0; i < N; i++) {
       var b = base[i], d = drift[i];
       var wob = 1 + amp * 0.55 * Math.sin(t * now.speed * d.sp + d.ph1) + quiver * Math.sin(t * 9 + d.ph2);
@@ -446,25 +638,29 @@
       lit = Math.min(1, lit * (0.9 + beat * 0.4));
       cA.copy(ember[i] ? EMBER : INK).lerp(flareColor, lit * 0.95);
       if (lit > 0.6) cA.lerp(cB.setRGB(1, 1, 1), (lit - 0.6) * 1.2);
+      var nh = nodeH[i];
+      if (nh > 0) cA.lerp(cH.setRGB(1, 0.42 + 0.4 * nh, 0.08 + 0.4 * nh * nh), Math.min(1, nh * 1.3));
       col[i * 3] = cA.r; col[i * 3 + 1] = cA.g; col[i * 3 + 2] = cA.b;
       siz[i] = lit;
     }
     nodeGeo.attributes.position.needsUpdate = true;
     nodeGeo.attributes.color.needsUpdate = true;
 
-    /* 線：両端の色を受け継ぐ */
+    /* 線：両端の色を受け継ぐ。熱せられた線は、オレンジ〜黄色に燃えて光る */
     for (i = 0; i < E; i++) {
       var a = pairs[i * 2], c = pairs[i * 2 + 1];
       var o = i * 6;
       lpos[o] = pos[a * 3]; lpos[o + 1] = pos[a * 3 + 1]; lpos[o + 2] = pos[a * 3 + 2];
       lpos[o + 3] = pos[c * 3]; lpos[o + 4] = pos[c * 3 + 1]; lpos[o + 5] = pos[c * 3 + 2];
-      var fa = 0.55 + siz[a] * 0.6, fc = 0.55 + siz[c] * 0.6;
+      var hh = heat[i];
+      var fa = 0.55 + siz[a] * 0.6 + hh * 0.5, fc = 0.55 + siz[c] * 0.6 + hh * 0.5;
       lcol[o] = col[a * 3] * fa; lcol[o + 1] = col[a * 3 + 1] * fa; lcol[o + 2] = col[a * 3 + 2] * fa;
       lcol[o + 3] = col[c * 3] * fc; lcol[o + 4] = col[c * 3 + 1] * fc; lcol[o + 5] = col[c * 3 + 2] * fc;
       /* 光が触れている枠だけ、上から加算で光らせる（触れていない枠は黒＝見えない） */
       var ga = siz[a] * siz[a] * 1.5, gc = siz[c] * siz[c] * 1.5;
-      gcol[o] = flareColor.r * ga; gcol[o + 1] = flareColor.g * ga; gcol[o + 2] = flareColor.b * ga;
-      gcol[o + 3] = flareColor.r * gc; gcol[o + 4] = flareColor.g * gc; gcol[o + 5] = flareColor.b * gc;
+      var hr = Math.min(1, hh * 1.7), hg2 = Math.min(0.8, hh * hh * 0.9 + hh * 0.3), hb = Math.min(0.3, hh * hh * hh * 0.4);
+      gcol[o] = flareColor.r * ga + hr; gcol[o + 1] = flareColor.g * ga + hg2; gcol[o + 2] = flareColor.b * ga + hb;
+      gcol[o + 3] = flareColor.r * gc + hr; gcol[o + 4] = flareColor.g * gc + hg2; gcol[o + 5] = flareColor.b * gc + hb;
     }
     lineGeo.attributes.position.needsUpdate = true;
     lineGeo.attributes.color.needsUpdate = true;
@@ -472,23 +668,19 @@
     glowGeo.attributes.color.needsUpdate = true;
 
     /* 中央の青白い光：静かに呼吸し、ときどき稲妻を放つ */
-    core.scale.setScalar(0.95 + Math.sin(t * 0.8) * 0.08 + (boltT > 0 ? boltT * 1.2 : 0));
+    core.scale.setScalar(0.95 + Math.sin(t * 0.8) * 0.08 + (boltT > 0 ? boltT * 1.4 : 0));
     core.material.opacity = 0.75 + Math.sin(t * 0.8) * 0.1 + (boltT > 0 ? boltT * 0.5 : 0);
     if (!reduceMotion) {
       boltWait -= delta;
-      if (boltWait <= 0) { boltWait = boltDemo ? 0.5 : 3 + Math.random() * 4; fireBolts(); }
+      if (boltWait <= 0) { boltWait = boltDemo ? 0.5 : 1 + Math.random() * 1.8; fireBolts(); }
       if (boltT > 0) {
         boltT -= delta;
-        var bf = boltDemo ? 1 : Math.max(0, boltT) / 0.42;
-        bolts.material.opacity = Math.min(1, bf * 1.4);
-        for (i = 0; i < boltLen * 2; i++) {
-          var mixw = (i % 2) ? 0.55 : 0.1;
-          bcol[i * 3] = 0.12 + mixw * 0.7;
-          bcol[i * 3 + 1] = 0.45 + mixw * 0.5;
-          bcol[i * 3 + 2] = 0.95;
-        }
-        boltGeo.attributes.color.needsUpdate = true;
-      } else if (boltLen) { boltGeo.setDrawRange(0, 0); boltLen = 0; }
+        var bf = boltDemo ? 1 : Math.max(0, boltT) / 0.5;
+        updateBolts(Math.min(1, bf * 1.5) * (0.78 + Math.random() * 0.22));
+      } else if (boltSegs.length) {
+        boltSegs = [];
+        boltLayers.forEach(function (L) { L.geo.setDrawRange(0, 0); });
+      }
     }
 
     /* 全体の回転と漂い */

@@ -757,3 +757,83 @@ body{
   .jslide__art{ height:129px; }
   .jslide__art img, .jslide__mark{ width:92px; height:92px; }
 }
+
+/* ==========================================================================
+   2026-10-05b：EQとは（〇△□の浮き彫り）／EQを学べばどうなるか（円状に回るカード）
+   ========================================================================== */
+.eqdef{ max-width:1080px; }
+.eqtri{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.1rem; }
+.eqtri__card{
+  position:relative; padding:clamp(22px,2.6vw,32px) clamp(20px,2.2vw,28px) clamp(24px,2.6vw,32px); border-radius:22px;
+  background:linear-gradient(160deg,#eef0f5 0%,#dfe2ea 100%); border:1px solid rgba(255,255,255,.85);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 26px 52px -36px rgba(21,27,52,.55);
+  transition:transform .8s var(--ease-out), box-shadow .8s var(--ease-out);
+}
+.eqtri__card:hover{ transform:translateY(-6px); box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 34px 60px -34px rgba(21,27,52,.6); }
+.eqtri__art{ display:block; width:min(190px,64%); aspect-ratio:1; margin:0 auto 1.3rem; overflow:visible; }
+.eqtri__kicker{ font-family:var(--font-en); font-size:.72rem; font-weight:600; letter-spacing:.2em; color:var(--ink-3); margin-bottom:.5rem; }
+.eqtri__q{ font-family:var(--font-head); font-weight:700; font-size:clamp(1.05rem,1.6vw,1.22rem); line-height:1.65; margin-bottom:.6rem; }
+.eqtri__t{ font-size:.86rem; line-height:1.9; color:var(--ink-2); }
+
+/* 浮き彫り：影・ハイライト・本体の3枚を重ねて、凹凸に見せる。本体には光が斜めに走る */
+.emb{ fill:none; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
+.emb--sh{ stroke:rgba(52,60,92,.6) !important; filter:blur(2.6px); transform:translate(4px,5px); opacity:.7; }
+.emb--hi{ stroke:#fff !important; filter:blur(.7px); transform:translate(-2.5px,-3px); opacity:.95; }
+.emb__spin{ transform-origin:80px 80px; animation:embSpin 26s linear infinite; }
+.emb__spin--rev{ animation-duration:19s; animation-direction:reverse; }
+.emb__tilt{ transform-origin:80px 80px; animation:embTilt 8s ease-in-out infinite alternate; }
+@keyframes embSpin{ to{ transform:rotate(360deg); } }
+@keyframes embTilt{ from{ transform:rotate(-5deg) scale(.98); } to{ transform:rotate(5deg) scale(1.02); } }
+.eqtri__card:hover .emb__spin{ animation-duration:9s; }
+.eqtri__card:hover .emb__spin--rev{ animation-duration:7s; }
+.eqtri__card:hover .emb__tilt{ animation-duration:3s; }
+@media (max-width:860px){
+  .eqtri{ grid-template-columns:1fr; }
+  .eqtri__art{ width:min(150px,50%); }
+}
+
+/* EQを学べばどうなるか：5枚のカードが、円状にゆっくり回る */
+.orbit{ position:relative; margin:clamp(4px,2vw,20px) 0 clamp(28px,4vw,52px); user-select:none; -webkit-user-select:none; }
+.orbit__ring{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.9rem; }
+.orbit__ring li{ display:flex; flex-direction:column; gap:.9rem; padding:1.3rem 1.4rem 1.4rem; }
+.orbit__ring li::before{ display:none; }
+.orbit__no{ font-family:var(--font-en); font-weight:300; font-size:2.7rem; line-height:1; letter-spacing:.04em; color:var(--accent); }
+.orbit__txt{ font-family:var(--font-head); font-weight:700; font-size:1.2rem; line-height:1.85; color:var(--ink); }
+.orbit__dots,.orbit__hint{ display:none; }
+
+.js .orbit__stage{
+  position:relative; height:clamp(380px,40vw,440px); perspective:1500px; perspective-origin:50% 40%;
+  cursor:grab; touch-action:pan-y;
+}
+.js .orbit__stage.is-drag{ cursor:grabbing; }
+.js .orbit__ring{
+  --W:clamp(220px,22vw,280px); --H:clamp(250px,25vw,300px); --R:clamp(270px,27vw,350px);
+  position:absolute; left:50%; top:50%; width:0; height:0; margin:0; padding:0; display:block; list-style:none;
+  transform-style:preserve-3d; transform:translateZ(calc(var(--R) * -1)) rotateY(0deg); will-change:transform;
+}
+.js .orbit__ring li{
+  position:absolute; left:calc(var(--W) / -2); top:calc(var(--H) / -2); width:var(--W); height:var(--H);
+  justify-content:space-between; padding:1.5rem 1.5rem 1.6rem; border-radius:22px;
+  background:linear-gradient(165deg,rgba(255,255,255,.96) 0%,rgba(240,241,248,.9) 100%);
+  border:1px solid rgba(255,255,255,.95); box-shadow:0 30px 60px -34px rgba(21,27,52,.55);
+  transform:rotateY(calc(var(--i) * 72deg)) translateZ(var(--R));
+  transition:box-shadow .6s var(--ease-out);
+}
+.js .orbit__ring li:hover{ transform:rotateY(calc(var(--i) * 72deg)) translateZ(var(--R)); }
+.js .orbit__ring li.is-front{ box-shadow:0 38px 70px -32px rgba(21,27,52,.62), 0 0 0 1px rgba(106,82,217,.18); }
+.js .orbit__dots{ display:flex; justify-content:center; gap:.7rem; margin-top:1.1rem; }
+.js .orbit__dots button{
+  width:11px; height:11px; padding:0; border-radius:50%; border:1px solid var(--line-2); background:transparent; cursor:pointer;
+  transition:background .4s, transform .4s var(--ease-out);
+}
+.js .orbit__dots button.is-on{ background:var(--accent); border-color:var(--accent); transform:scale(1.25); }
+.js .orbit__hint{ display:block; text-align:center; margin-top:.7rem; font-size:.76rem; letter-spacing:.14em; color:var(--ink-3); }
+@media (max-width:700px){
+  .js .orbit__stage{ perspective:1100px; height:360px; }
+  .js .orbit__ring{ --W:210px; --H:250px; --R:230px; }
+  .js .orbit__txt{ font-size:1rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .emb__spin,.emb__tilt{ animation:none; }
+}
+.capture .emb__spin,.capture .emb__tilt{ animation:none !important; }

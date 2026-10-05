@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261005a">
+<link rel="stylesheet" href="css/style.css?v=20261005b">
 <script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');if(/[?&]hover=1/.test(location.search))document.documentElement.classList.add('capture-hover');</script>
 </head>
 <body>
@@ -69,11 +69,63 @@
         <p class="lead reveal">EQとは、Emotional Intelligenceの略で、日本語では「感情知能」と呼ばれています。<br class="pc">一般的なEQでは、自分や相手の感情に気づき、その感情を理解し、適切に扱いながら、<br class="pc">考え方や行動に活かしていく力として捉えられています。</p>
       </div>
       <div class="eqdef">
-        <ul class="eqdef__list">
-          <li class="reveal">「自分は今、何を感じているのか」</li>
-          <li class="reveal" style="--d:.1s">「相手は、どんな気持ちなのか」</li>
-          <li class="reveal" style="--d:.2s">「この感情にどう対応すればいいのか」</li>
-        </ul>
+        <div class="eqtri">
+          <article class="eqtri__card reveal">
+            <svg class="eqtri__art" viewBox="0 0 160 160" aria-hidden="true">
+              <defs>
+                <linearGradient id="eg-c" class="eg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="160" y2="160">
+                  <stop offset="0" stop-color="#d6d1c4"/><stop offset=".38" stop-color="#e4dfd1"/><stop offset=".5" stop-color="#fff3bf"/><stop offset=".62" stop-color="#e4dfd1"/><stop offset="1" stop-color="#d6d1c4"/>
+                  <animateTransform attributeName="gradientTransform" type="translate" from="-170 -170" to="170 170" dur="4.6s" repeatCount="indefinite"/>
+                </linearGradient>
+              </defs>
+              <g class="emb" style="stroke:url(#eg-c)">
+                <circle class="emb__spin" cx="80" cy="80" r="58" stroke-dasharray="150 24 70 30 40 50.4"/>
+                <circle class="emb__spin emb__spin--rev" cx="80" cy="80" r="43" stroke-dasharray="90 18 60 30 40 32.5" stroke-width="5.5"/>
+              </g>
+            </svg>
+            <p class="eqtri__kicker">01 ・ 気づく</p>
+            <h3 class="eqtri__q">「自分は今、何を感じているのか」</h3>
+            <p class="eqtri__t">まず、いまの自分の気持ちに気づくこと。すべてのはじまりです。</p>
+          </article>
+          <article class="eqtri__card reveal" style="--d:.1s">
+            <svg class="eqtri__art" viewBox="0 0 160 160" aria-hidden="true">
+              <defs>
+                <linearGradient id="eg-t" class="eg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="160" y2="160">
+                  <stop offset="0" stop-color="#d6d1c4"/><stop offset=".38" stop-color="#e4dfd1"/><stop offset=".5" stop-color="#fff3bf"/><stop offset=".62" stop-color="#e4dfd1"/><stop offset="1" stop-color="#d6d1c4"/>
+                  <animateTransform attributeName="gradientTransform" type="translate" from="-170 -170" to="170 170" dur="4.6s" begin="1.5s" repeatCount="indefinite"/>
+                </linearGradient>
+              </defs>
+              <g class="emb" style="stroke:url(#eg-t)"><g class="emb__tilt">
+                <path d="M80 24 L136 126 H64"/>
+                <path d="M80 24 L24 126"/>
+                <path d="M80 64 L108 114 H52 Z" stroke-width="5.5"/></g>
+              </g>
+            </svg>
+            <p class="eqtri__kicker">02 ・ 理解する</p>
+            <h3 class="eqtri__q">「相手は、どんな気持ちなのか」</h3>
+            <p class="eqtri__t">相手の立場に立って、その気持ちを思いやり、想像してみること。</p>
+          </article>
+          <article class="eqtri__card reveal" style="--d:.2s">
+            <svg class="eqtri__art" viewBox="0 0 160 160" aria-hidden="true">
+              <defs>
+                <linearGradient id="eg-s" class="eg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="160" y2="160">
+                  <stop offset="0" stop-color="#d6d1c4"/><stop offset=".38" stop-color="#e4dfd1"/><stop offset=".5" stop-color="#fff3bf"/><stop offset=".62" stop-color="#e4dfd1"/><stop offset="1" stop-color="#d6d1c4"/>
+                  <animateTransform attributeName="gradientTransform" type="translate" from="-170 -170" to="170 170" dur="4.6s" begin="3s" repeatCount="indefinite"/>
+                </linearGradient>
+              </defs>
+              <g class="emb" style="stroke:url(#eg-s)">
+                <g class="emb__tilt">
+                  <path d="M80 22 L138 80 L80 138"/>
+                  <path d="M80 22 L22 80 L56 114"/>
+                  <path d="M80 52 L108 80 L80 108 L52 80 Z" stroke-width="5.5"/>
+                </g>
+              </g>
+            </svg>
+            <p class="eqtri__kicker">03 ・ 選ぶ</p>
+            <h3 class="eqtri__q">「この感情にどう対応すればいいのか」</h3>
+            <p class="eqtri__t">感じたことを受けとめ、よりよい選択と行動につなげていくこと。</p>
+          </article>
+        </div>
         <p class="eqdef__close reveal" style="--d:.3s">これらを理解し、<em>より良い選択につなげていく力</em>です。</p>
       </div>
     </div>
@@ -390,13 +442,19 @@
         <p class="lead reveal">EQを高めることで、人との関わり方や仕事での行動に変化が生まれることが研究されています。</p>
       </div>
 
-      <ul class="changes reveal">
-        <li>自分の感情や考え方を客観的に捉えられる</li>
-        <li>相手の立場を理解しやすくなる</li>
-        <li>感情に流されず、より良い選択ができる</li>
-        <li>コミュニケーションや人間関係が変わる</li>
-        <li>リーダーシップやチームづくりに活かせる</li>
-      </ul>
+      <div class="orbit reveal" id="orbit" aria-label="EQを学ぶと起きる5つの変化。ドラッグで回せます">
+        <div class="orbit__stage" id="orbit-stage">
+          <ul class="orbit__ring changes" id="orbit-ring">
+            <li><span class="orbit__no">01</span><span class="orbit__txt">自分の感情や考え方を客観的に捉えられる</span></li>
+            <li><span class="orbit__no">02</span><span class="orbit__txt">相手の立場を理解しやすくなる</span></li>
+            <li><span class="orbit__no">03</span><span class="orbit__txt">感情に流されず、より良い選択ができる</span></li>
+            <li><span class="orbit__no">04</span><span class="orbit__txt">コミュニケーションや人間関係が変わる</span></li>
+            <li><span class="orbit__no">05</span><span class="orbit__txt">リーダーシップやチームづくりに活かせる</span></li>
+          </ul>
+        </div>
+        <div class="orbit__dots" id="orbit-dots" role="tablist" aria-label="変化を選ぶ"></div>
+        <p class="orbit__hint">ドラッグ・スワイプで回せます</p>
+      </div>
       <p class="lead reveal" style="max-width:760px">単に「感情をコントロールする」のではなく、<em>自分の認識を知り、育てること</em>を大切にしています。</p>
 
       <div class="cases">
@@ -471,9 +529,10 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/orb.js?v=20261005a"></script>
-<script src="js/common.js?v=20261005a"></script>
-<script src="js/main.js?v=20261005a"></script>
-<script src="js/cards.js?v=20261005a"></script>
+<script src="js/orb.js?v=20261005b"></script>
+<script src="js/common.js?v=20261005b"></script>
+<script src="js/main.js?v=20261005b"></script>
+<script src="js/cards.js?v=20261005b"></script>
+<script src="js/sections.js?v=20261005b"></script>
 </body>
 </html>
