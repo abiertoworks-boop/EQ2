@@ -859,3 +859,55 @@ body{
 .js .orbit__ring li .orbit__txt{ font-size:1.12rem; }
 @media (max-width:700px){ .js .orbit__ring{ --ic:96px; } .js .orbit__ring li .orbit__txt{ font-size:.98rem; } }
 .capture .orbit__ic{ animation:none; }
+
+/* ==========================================================================
+   2026-10-07：メニューのボタン幅を揃える／認識のクセのカード画像（脳と音叉）／体験会の予約ページ
+   ========================================================================== */
+.nav .btn--sm{ min-width:150px; padding:.5rem 2.2rem; white-space:nowrap; }
+.nav .btn--sm.btn--ghost{ min-width:176px; }
+.stage3__art{ height:236px; align-items:center; }
+.stage3__art img{ height:204px; width:auto; margin-bottom:0; object-fit:contain; }
+.stage3__no{ z-index:1; }
+
+.rsv{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:clamp(18px,3vw,36px); align-items:start; }
+.rsv__col{ min-width:0; }
+.rsv__h{ font-family:var(--font-head); font-size:1.15rem; margin-bottom:.9rem; }
+.rsv__h small{ font-family:var(--font-body); font-size:.76rem; color:var(--ink-3); letter-spacing:.06em; margin-left:.5rem; }
+.cal{ user-select:none; -webkit-user-select:none; }
+.cal__bar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.7rem; }
+.cal__title{ font-family:var(--font-head); font-size:1.2rem; }
+.cal__nav{ width:40px; height:40px; border-radius:50%; border:1px solid var(--line-2); background:var(--glass-strong); color:var(--ink); font-size:1rem; cursor:pointer; transition:transform .4s var(--ease-out), border-color .3s; }
+.cal__nav:hover:not(:disabled){ border-color:var(--accent); transform:scale(1.08); }
+.cal__nav:disabled{ opacity:.3; cursor:default; }
+.cal__grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
+.cal__dow{ text-align:center; font-size:.72rem; letter-spacing:.08em; color:var(--ink-3); padding:.3rem 0; }
+.cal__dow.is-sun{ color:#b0473b; } .cal__dow.is-sat{ color:#3f78d0; }
+.cal__d{
+  position:relative; aspect-ratio:1/1; border-radius:14px; border:1px solid transparent; background:rgba(255,255,255,.55);
+  font-family:var(--font-en); font-size:.95rem; color:var(--ink); cursor:pointer; padding:0;
+  transition:transform .4s var(--ease-out), background .3s, border-color .3s, box-shadow .4s;
+}
+.cal__d:hover:not(:disabled){ transform:translateY(-3px); border-color:var(--accent); box-shadow:0 14px 26px -18px var(--glow); }
+.cal__d:disabled{ background:transparent; color:#b9bccb; cursor:default; }
+.cal__d.is-today::after{ content:""; position:absolute; left:50%; bottom:6px; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:var(--accent); }
+.cal__d.is-sel{ background:var(--navy); color:#fff; border-color:var(--navy); box-shadow:0 16px 30px -18px rgba(18,26,59,.7); }
+.cal__d.is-sel::after{ background:#fff; }
+.cal__blank{ visibility:hidden; }
+.cal__hint{ margin-top:.8rem; font-size:.8rem; color:var(--ink-3); line-height:1.8; }
+.slots{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+.slot{ position:relative; }
+.slot input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+.slot span{ display:block; padding:.55rem 1.1rem; border-radius:999px; border:1px solid var(--line-2); background:var(--glass-strong); font-size:.88rem; transition:background .3s, color .3s, border-color .3s; }
+.slot input:checked + span{ background:var(--navy); color:#fff; border-color:var(--navy); }
+.slot input:focus-visible + span{ outline:2px solid var(--accent); outline-offset:2px; }
+.rsv__pick{ margin-top:1rem; padding:.9rem 1.1rem; border-radius:16px; background:rgba(255,255,255,.7); font-family:var(--font-head); font-size:1.05rem; min-height:3.2rem; }
+.rsv__pick em{ font-style:normal; color:var(--accent); }
+.rsv__form{ display:grid; gap:.7rem; }
+.rsv__form label.lab{ font-size:.78rem; letter-spacing:.06em; color:var(--ink-3); margin-bottom:-.35rem; }
+.rsv__form select.field{ appearance:auto; }
+.rsv__form .consent{ display:flex; gap:.5rem; align-items:flex-start; font-size:.8rem; color:var(--ink-2); line-height:1.7; }
+.rsv__form .consent input{ margin-top:.35rem; accent-color:var(--accent); }
+.rsv__done{ display:none; padding:1.4rem 1.5rem; border-radius:20px; background:rgba(255,255,255,.78); }
+.rsv__done.is-show{ display:block; }
+.rsv__done h3{ font-family:var(--font-head); font-size:1.3rem; margin-bottom:.5rem; }
+@media (max-width:860px){ .rsv{ grid-template-columns:1fr; } .nav .btn--sm.btn--ghost{ min-width:0; padding:.5rem 1.3rem; } }

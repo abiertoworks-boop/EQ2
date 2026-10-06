@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>体験会のご予約｜EQ Gate — 株式会社Brifu</title>
+<meta name="description" content="EQ Gateの体験会のご予約フォームです。カレンダーからご希望の日と時間を選んで送信してください。株式会社Brifuからご連絡します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20261007a">
+<script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');</script>
+</head>
+<body>
+
+<canvas id="core-canvas" aria-hidden="true"></canvas>
+
+<header class="site-header" id="header">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">EQ Gate</span>
+      <span class="brand__by">by 株式会社Brifu</span>
+    </a>
+    <nav class="nav" aria-label="サイト内">
+      <a href="index.html#about-eq">EQとは</a>
+      <a href="index.html#cycle">認識の循環</a>
+      <a href="index.html#work">認識のワーク</a>
+      <a href="index.html#cards">EQコアカード</a>
+      <a href="index.html#journey">次への学び</a>
+      <a class="btn btn--sm btn--ghost" href="index.html"><span>EQ Gate トップ</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero diag-hero" id="reserve" data-orb="0.5" data-orb-x="3.8">
+    <div class="container">
+      <div class="diag">
+        <div class="section-head">
+          <p class="eyebrow reveal">Experience Session — 体験会のご予約</p>
+          <h1 class="h-1 reveal">体験会に、<br>参加してみませんか。</h1>
+          <p class="lead reveal">カレンダーからご希望の日と時間を選んで、送信してください。<br class="pc">内容を確認のうえ、株式会社Brifuからメールでご連絡します（確定のご連絡をもって予約完了です）。</p>
+        </div>
+
+        <div class="panel reveal" id="rsv-panel">
+          <div class="rsv" id="rsv-main">
+            <div class="rsv__col">
+              <h2 class="rsv__h">1. 日にちを選ぶ</h2>
+              <div class="cal" id="cal" aria-label="ご希望日のカレンダー"></div>
+              <p class="cal__hint" id="cal-hint"></p>
+              <h2 class="rsv__h" style="margin-top:1.4rem">2. 時間を選ぶ</h2>
+              <div class="slots" id="slots" role="radiogroup" aria-label="ご希望の時間"></div>
+              <p class="rsv__pick" id="rsv-pick" aria-live="polite">日にちと時間を選ぶと、ここに表示されます。</p>
+            </div>
+
+            <div class="rsv__col">
+              <h2 class="rsv__h">3. お客様の情報</h2>
+              <form class="rsv__form" id="rsv-form" novalidate>
+                <label class="lab" for="f-name">お名前</label>
+                <input class="field" id="f-name" type="text" name="name" placeholder="例）山田 花子" autocomplete="name" required>
+                <label class="lab" for="f-email">メールアドレス</label>
+                <input class="field" id="f-email" type="email" name="email" placeholder="example@mail.com" autocomplete="email" required>
+                <label class="lab" for="f-tel">お電話番号（任意）</label>
+                <input class="field" id="f-tel" type="tel" name="tel" placeholder="例）090-0000-0000" autocomplete="tel">
+                <label class="lab" for="f-num">参加人数</label>
+                <select class="field" id="f-num" name="num">
+                  <option>1名</option><option>2名</option><option>3名</option><option>4名</option><option>5名以上</option>
+                </select>
+                <label class="lab" for="f-memo">ご質問・ご要望（任意）</label>
+                <textarea class="textarea" id="f-memo" name="memo" rows="4" placeholder="事前に知りたいこと、ご希望などがあればご記入ください。"></textarea>
+                <label class="consent"><input type="checkbox" name="agree" required> ご入力の内容を、体験会のご案内のために株式会社Brifuが使用することに同意します。</label>
+                <button class="btn" type="submit"><span>この内容で予約を申し込む</span></button>
+                <p class="mail__msg" id="rsv-msg" role="status"></p>
+                <p class="note">ご入力内容は、株式会社Brifu（info@brifu.co.jp）に届きます。送信には、メール送信サービス「FormSubmit」を利用しています。</p>
+              </form>
+            </div>
+          </div>
+
+          <div class="rsv__done" id="rsv-done" role="status">
+            <h3>お申し込みを受け付けました。</h3>
+            <p id="rsv-done-text"></p>
+            <p class="note" style="margin-top:.8rem">確認のメールが届かない場合は、迷惑メールフォルダをご確認ください。</p>
+            <div class="step-nav">
+              <a class="btn btn--ghost" href="index.html"><span>EQ Gate トップへ</span></a>
+              <a class="btn btn--ghost" href="experience.html"><span>体験ワークをやってみる</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p>感情を理解し、お互いを大切にする社会をつくる。</p>
+      <small>© 株式会社Brifu — EQ Gate</small>
+    </div>
+    <nav aria-label="関連サイト">
+      <a href="index.html">EQ Gate トップ</a>
+      <a href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener">EQ Platform</a>
+      <a href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener">株式会社Brifu</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/orb.js?v=20261007a"></script>
+<script src="js/common.js?v=20261007a"></script>
+<script src="js/reserve.js?v=20261007a"></script>
+</body>
+</html>

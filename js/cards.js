@@ -43,10 +43,10 @@
   { action:'言葉に<br>する', value:'整理・自己理解', hex:'#7BBCD5' },
   { action:'説明する', value:'構造化・分かりやすさ', hex:'#7BBCD5' },
   { action:'書く', value:'整理・丁寧さ', hex:'#7BBCD5' },
-  { action:'自分を<br>選ぶ', value:'自己確立・選択', hex:'#A8A8A8' },
-  { action:'影響を<br>与える', value:'主体性・影響力', hex:'#A8A8A8' },
-  { action:'自分を<br>信じる', value:'客観性・自尊心', hex:'#A8A8A8' },
-  { action:'決める', value:'自己決定・判断力', hex:'#A8A8A8' },
+  { action:'人の意見<br>に流される', value:'自己確立・選択', hex:'#A8A8A8' },
+  { action:'説得する', value:'主体性・影響力', hex:'#A8A8A8' },
+  { action:'評価を<br>気にする', value:'客観性・自尊心', hex:'#A8A8A8' },
+  { action:'優柔不断', value:'自己決定・判断力', hex:'#A8A8A8' },
   { action:'断る', value:'自己信頼・勇気', hex:'#A8A8A8' },
   { action:'向き合う', value:'勇気・自己理解', hex:'#A8A8A8' },
   { action:'育む', value:'成長・見守り', hex:'#E05A6A' },
@@ -191,7 +191,11 @@
     document.getElementById('eqcc-card-chevron-shape').style.background = card.hex;
     var vt = document.getElementById('eqcc-card-value-text');
     vt.style.color = textColor(card.hex); vt.textContent = card.value;
-    document.getElementById('eqcc-card-action').innerHTML = card.action;
+    var actEl = document.getElementById("eqcc-card-action");
+    actEl.innerHTML = card.action;
+    /* 文字数の多いカードは、枠に収まる大きさまで文字を小さくする（1行あたり4文字までは標準サイズ） */
+    var maxLen = 0; card.action.split("<br>").forEach(function (ln) { maxLen = Math.max(maxLen, ln.length); });
+    actEl.style.fontSize = maxLen > 4 ? Math.max(22, Math.floor(138 / maxLen)) + "px" : "";
 
     var area = document.getElementById('eqcc-drawn');
     area.classList.remove('is-show'); void area.offsetWidth; area.classList.add('is-show');
