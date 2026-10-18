@@ -1011,3 +1011,10 @@ body{
 .capture .case__inner{ transition:none; }
 .case .case__back p.case__cap{ color:#fff; font-size:1.3rem; line-height:1.5; }
 .case .case__back p.case__cap small{ font-size:.78rem; line-height:1.6; }
+
+/* 2026-10-19b：ヘッダーのボタンを2つ並べる／最後のセクションの手前の半透明レイヤーを短く */
+.nav .btn--sm.btn--ghost{ min-width:0; padding:.5rem 1.5rem; }
+.nav .btn--sm:not(.btn--ghost){ min-width:0; padding:.5rem 1.6rem; }
+@media (max-width:560px){ .nav{ gap:.35rem; } .nav .btn--sm, .nav .btn--sm.btn--ghost{ padding:.4rem .6rem; font-size:.68rem; min-height:34px; letter-spacing:0; } .brand__by{ display:none; } .brand__name{ white-space:nowrap; font-size:1rem; } }
+#journey.sec--veil2{ background:linear-gradient(to bottom, rgba(236,238,244,.6) 0, rgba(236,238,244,.6) 58%, rgba(236,238,244,0) 82%); padding-bottom:clamp(24px,4vw,48px); }
+#start{ padding-top:clamp(24px,4vw,48px); }

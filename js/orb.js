@@ -527,11 +527,38 @@
     sections.forEach(function (s) { io.observe(s); });
     applySection(sections[0]);
   }
-  function boost(v) { canvas.style.opacity = String(v == null ? 0.85 : v); }
-  function restore() { canvas.style.opacity = String(baseOpacity); }
+  var boostedTo = null;
+  function boost(v) { boostedTo = (v == null ? 0.85 : v); canvas.style.opacity = String(boostedTo); }
+  function restore() { boostedTo = null; canvas.style.opacity = String(baseOpacity); }
+
+  /* ---------- スクロールに合わせて、球体が移動・拡大縮小する道すじ ----------
+     data-orb-k="位置:x,y,z,濃さ,横の揺れ,奥行きの揺れ; …" をセクションに書く。
+     位置＝そのセクションの高さのどこが画面の中央に来たときか（0=上端 〜 1=下端。0.5より前や1.5もOK）
+     z は大きいほど手前（大きく見える）、小さいほど奥（小さく見える）。キーとキーのあいだは、スクロールに合わせてなめらかにつなぐ */
+  var keys = [];
+  [].forEach.call(document.querySelectorAll('[data-orb-k]'), function (sec) {
+    sec.getAttribute('data-orb-k').split(';').forEach(function (part) {
+      var m = part.trim().split(':'); if (m.length < 2) return;
+      var v = m[1].split(',').map(parseFloat);
+      keys.push({ sec: sec, f: parseFloat(m[0]), x: v[0] || 0, y: v[1] || 0, z: v[2] || 0, op: v[3] == null ? 1 : v[3], sx: v[4] || 0, sz: v[5] || 0 });
+    });
+  });
+  var kv = { x: 0, y: 0, z: 0, op: 1, sx: 0, sz: 0 };
+  function smooth01(u) { return u * u * (3 - 2 * u); }
+  function evalKeys() {
+    var vh = viewH(), prev = null, next = null, i;
+    for (i = 0; i < keys.length; i++) {
+      var r = keys[i].sec.getBoundingClientRect();
+      keys[i].y_ = r.top + keys[i].f * r.height - vh * 0.5;    // 0 以下＝もう通り過ぎた
+      if (keys[i].y_ <= 0) prev = keys[i]; else if (!next) next = keys[i];
+    }
+    var a = prev || next, b = next || prev, u = 0;
+    if (prev && next) u = smooth01(Math.min(1, Math.max(0, -prev.y_ / Math.max(1, next.y_ - prev.y_))));
+    ['x', 'y', 'z', 'op', 'sx', 'sz'].forEach(function (k) { kv[k] = a[k] + (b[k] - a[k]) * u; });
+  }
 
   /* ヒーローをスクロールすると、球体へ近づいていく */
-  var camZ = CAM_FAR;
+  var camZ = keys.length ? 7.5 : CAM_FAR;
   var hero = document.querySelector('[data-orb-zoom]');
   function zoomProgress() {
     if (!hero || reduceMotion) return hero ? 1 : 0;
@@ -708,14 +735,26 @@
 
     var floatY = Math.sin(t * 0.5) * 0.12 * ms;
     var floatX = Math.sin(t * 0.33) * 0.07 * ms;
-    var wantX = (isSmall ? 0 : offsetX) + hoverX + floatX + pointerTarget.y * 0.25;
-    group.position.x += (wantX - group.position.x) * 0.04;
-    var wantY = (isSmall ? 2.25 : 0) + floatY;
-    group.position.y += (wantY - group.position.y) * 0.05;
+    var useKeys = keys.length > 0;
+    if (useKeys) evalKeys();
+    /* 揺れ：左右へゆったり往復し、奥へ離れたり手前へ来たりする（キーで揺れの大きさを指定） */
+    var swayX = useKeys ? kv.sx * Math.sin(t * 0.42) * ms : 0;
+    var swayZ = useKeys ? kv.sz * Math.sin(t * 0.31 + 1.3) * ms : 0;
+    var baseX = useKeys ? kv.x : offsetX;
+    var wantX = (isSmall ? 0 : baseX + swayX) + hoverX + floatX + pointerTarget.y * 0.25;
+    group.position.x += (wantX - group.position.x) * (useKeys ? 0.08 : 0.04);
+    var wantY = (isSmall ? 2.25 : (useKeys ? kv.y : 0)) + floatY;
+    group.position.y += (wantY - group.position.y) * 0.06;
 
     depthNow += (target.depth - depthNow) * 0.04;
     var breathZ = Math.sin(t * 0.21) * 0.9 * ms + Math.sin(t * 0.53) * 0.25 * ms;
-    group.position.z += ((offsetZ + breathZ + depthNow) - group.position.z) * 0.035;
+    var wantZ = useKeys ? ((isSmall ? kv.z * 0.45 - 0.4 : kv.z) + swayZ + breathZ * 0.3 + depthNow) : (offsetZ + breathZ + depthNow);
+    group.position.z += (wantZ - group.position.z) * (useKeys ? 0.08 : 0.035);
+    if (capture && useKeys) { group.position.set(isSmall ? 0 : baseX + swayX, wantY, wantZ); }
+    if (useKeys) {
+      baseOpacity = isSmall ? kv.op * (1 - 0.55 * Math.min(1, window.scrollY / Math.max(1, viewH()))) : kv.op;
+      if (boostedTo === null) canvas.style.opacity = String(baseOpacity.toFixed(3));
+    }
 
     bubbles.forEach(function (bb) {
       var u = bb.userData;
@@ -725,7 +764,8 @@
     });
     bubbleGroup.rotation.y += delta * 0.02 * ms;
 
-    var want = CAM_FAR + (CAM_NEAR - CAM_FAR) * zoomProgress();
+    /* 道すじ（data-orb-k）を使うページは、カメラを固定して、球体のほうを動かす */
+    var want = keys.length ? 7.5 : CAM_FAR + (CAM_NEAR - CAM_FAR) * zoomProgress();
     camZ += (want - camZ) * 0.08;
     camera.position.z = camZ + Math.sin(t * 0.13) * 0.3 * ms;
     camera.position.x = Math.sin(t * 0.09) * 0.25 * ms;

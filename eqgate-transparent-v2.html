@@ -9,9 +9,8 @@
 <!-- 旧 EQ Gate のURL。Brifu サイトなどのリンクを切らないため、新しい EQ Gate へ自動で移動する -->
 <script>
   (function () {
-    var hash = location.hash;
-    var map = { '#cards8': 'index.html#learn', '#eq-card-experience': 'index.html#cards', '#diagnosis': 'index.html#work', '#timeline': 'index.html#about-eq', '#principles': 'index.html#about-eq', '#paths': 'index.html#journey' };
-    location.replace(map[hash] || ('index.html' + hash));
+    /* どの旧リンクも、新しい EQ Gate のトップから始める */
+    location.replace("index.html");
   })();
 </script>
 <meta http-equiv="refresh" content="0; url=index.html">
