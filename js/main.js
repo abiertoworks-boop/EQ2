@@ -51,77 +51,6 @@
   });
 
   /* ==========================================================
-     2. 認識の循環（11ステップ・アイコン）
-     ========================================================== */
-  var STEPS = [
-    { name: '出来事', icon: 'event', color: '#9aa3b8', desc: '日常で起きる出来事・現象・情報。ここから循環が始まる。' },
-    { name: '認知', icon: 'cognition', color: '#1a6eb9', desc: '五感や経験を通して、情報を受け取る。' },
-    { name: '認識', icon: 'recognition', color: '#7b8ce0', desc: '価値観や過去の経験をもとに、意味づけ・解釈する。' },
-    { name: '感情', icon: 'emotion', color: '#e8384a', desc: '認識から感情が生まれる。感情は、認識を知らせる情報。' },
-    { name: '自覚', icon: 'awareness', color: '#f5b400', desc: '感情や思考、身体の反応に気づき、今の自分を客観的に見る。' },
-    { name: '理解', icon: 'understanding', color: '#39a62f', desc: 'なぜそう感じたのか。認識が生まれる仕組みや背景を知る。' },
-    { name: '認識の更新', icon: 'update', color: '#fe8809', desc: '新しい視点や価値観を取り入れ、認識を書き換える。' },
-    { name: 'あり方', icon: 'being', color: '#1d3f7a', desc: '価値観が日常に表れた状態。考え方・接し方・伝え方。' },
-    { name: '行動', icon: 'action', color: '#0a1f4d', desc: 'あり方に基づいて、具体的な行動を選ぶ。' },
-    { name: '結果', icon: 'result', color: '#9aa3b8', desc: '行動の結果として、現実の変化や反応が返ってくる。' },
-    { name: '新しい経験', icon: 'experience', color: '#9aa3b8', desc: '新しい経験が、次の認知の入口になる。' }
-  ];
-  var ring = document.getElementById('ring');
-  var center = document.getElementById('ring-center');
-  var nodes = [];
-  var active = -1, autoTimer = null, userTouched = false;
-
-  function sizeRing() { ring.style.setProperty('--ringpx', (ring.clientWidth * 0.41) + 'px'); }
-  STEPS.forEach(function (s, i) {
-    var b = document.createElement('button');
-    b.className = 'node';
-    b.type = 'button';
-    b.style.setProperty('--a', (i * 360 / STEPS.length) + 'deg');
-    b.style.setProperty('--sc', s.color);
-    b.setAttribute('aria-label', (i + 1) + '. ' + s.name);
-    b.innerHTML = '<img class="node__img" src="images/icons/' + s.icon + '.png" alt="" width="72" height="72" loading="lazy">' +
-      '<span class="node__num">' + (i + 1) + '</span><span class="node__label">' + s.name + '</span>';
-    b.addEventListener('mouseenter', function () { stopAuto(); activate(i, true); });
-    b.addEventListener('mouseleave', function () { Orb.reset(); Orb.restore(); Orb.setOffsetX(0); });
-    b.addEventListener('focus', function () { stopAuto(); activate(i, true); });
-    b.addEventListener('click', function () { stopAuto(); activate(i, true); });
-    ring.appendChild(b);
-    nodes.push(b);
-  });
-  sizeRing();
-  window.addEventListener('resize', sizeRing);
-
-  function activate(i, fromUser) {
-    var s = STEPS[i];
-    if (active === i && !fromUser) return;
-    nodes.forEach(function (n, k) { n.classList.toggle('is-active', k === i); });
-    active = i;
-    center.style.setProperty('--sc', s.color);
-    center.innerHTML = '<span class="ring__no">STEP ' + String(i + 1).padStart(2, '0') + ' / 11</span>' +
-      '<span class="ring__name">' + s.name + '</span><span class="ring__desc">' + s.desc + '</span>';
-    center.classList.remove('swap'); void center.offsetWidth; center.classList.add('swap');
-    if (fromUser) {
-      Orb.setTarget(s.color, 0.45, 1.3, 1.5);
-      Orb.boost(0.8);
-      Orb.setOffsetX(i % 2 ? 0.55 : -0.55);
-      if (isTouch) setTimeout(function () { Orb.reset(); Orb.restore(); Orb.setOffsetX(0); }, 2200);
-    }
-  }
-  /* 誰もさわっていない間は、光が順番にステップを巡る */
-  function startAuto() {
-    if (userTouched || autoTimer) return;
-    autoTimer = setInterval(function () { activate((active + 1) % STEPS.length, false); }, 2400);
-    activate((active + 1) % STEPS.length, false);
-  }
-  function stopAuto() { userTouched = true; clearInterval(autoTimer); autoTimer = null; }
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (en) {
-      if (en[0].isIntersecting) startAuto(); else { clearInterval(autoTimer); autoTimer = null; }
-    }, { threshold: 0.35 }).observe(ring);
-  }
-  if (new URLSearchParams(location.search).has('capture')) activate(3, false);
-
-  /* ==========================================================
      3. 認識のクセを体験する（6ステップの書き出し）
         EQ認識理論の順：出来事 → 感情 → 思考（心の声）→ 認識（意味づけ・価値観・信念）→ 自覚
         → 大切にしていた価値観（EQコアカード®の8色）を選び、その色のカードを引く。
@@ -238,65 +167,6 @@
 
 
   /* ==========================================================
-     2b. 3つの原理にふれると、関係するステップが拡大し、線で結ばれる
-     ========================================================== */
-  var links = document.getElementById('ring-links');
-  var SVGNS = 'http://www.w3.org/2000/svg';
-  function nodePoint(i) {
-    var a = (i * 360 / STEPS.length) * Math.PI / 180;
-    return [50 + 41 * Math.sin(a), 50 - 41 * Math.cos(a)];
-  }
-  function clearLinks() {
-    ring.classList.remove('is-linking');
-    nodes.forEach(function (n) { n.classList.remove('is-linked'); });
-    [].forEach.call(links.children, function (el) { el.classList.remove('is-on'); });
-    setTimeout(function () { if (!ring.classList.contains('is-linking')) links.innerHTML = ''; }, 500);
-  }
-  function showLinks(p) {
-    var ids = p.getAttribute('data-link').split(',').map(function (x) { return parseInt(x, 10) - 1; });
-    var color = getComputedStyle(p).getPropertyValue('--pc').trim();
-    stopAuto();
-    links.innerHTML = '';
-    ring.style.setProperty('--lc', color);
-    ring.classList.add('is-linking');
-    nodes.forEach(function (n, k) { n.classList.toggle('is-linked', ids.indexOf(k) > -1); n.classList.remove('is-active'); });
-    var d = ids.map(function (id, k) { var pt = nodePoint(id); return (k ? 'L' : 'M') + pt[0].toFixed(2) + ' ' + pt[1].toFixed(2); }).join(' ');
-    var path = document.createElementNS(SVGNS, 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('pathLength', '1');
-    links.appendChild(path);
-    ids.forEach(function (id) {
-      var pt = nodePoint(id), c = document.createElementNS(SVGNS, 'circle');
-      c.setAttribute('cx', pt[0]); c.setAttribute('cy', pt[1]); c.setAttribute('r', '1.1');
-      links.appendChild(c);
-    });
-    void links.getBoundingClientRect();
-    requestAnimationFrame(function () { [].forEach.call(links.children, function (el) { el.classList.add('is-on'); }); });
-    center.style.setProperty('--sc', color);
-    center.innerHTML = '<span class="ring__no">PRINCIPLE ' + p.querySelector('.principle__no').textContent + '</span>' +
-      '<span class="ring__name" style="font-size:clamp(1.05rem,2vw,1.35rem)">' + p.querySelector('h3').textContent + '</span>' +
-      '<span class="ring__desc">' + p.querySelector('.principle__steps').textContent + '</span>';
-    center.classList.remove('swap'); void center.offsetWidth; center.classList.add('swap');
-    Orb.setTarget(color, 0.4, 1.2, 1.5); Orb.boost(0.75);
-  }
-  [].forEach.call(document.querySelectorAll('.principle[data-link]'), function (p) {
-    p.addEventListener('mouseenter', function () { showLinks(p); });
-    p.addEventListener('focus', function () { showLinks(p); });
-    p.addEventListener('mouseleave', function () { clearLinks(); Orb.reset(); Orb.restore(); });
-    p.addEventListener('blur', function () { clearLinks(); Orb.reset(); Orb.restore(); });
-    p.addEventListener('click', function () {
-      var on = p.classList.toggle('is-on');
-      [].forEach.call(document.querySelectorAll('.principle.is-on'), function (o) { if (o !== p) o.classList.remove('is-on'); });
-      if (on) { showLinks(p); if (isTouch) ring.scrollIntoView({ behavior: 'smooth', block: 'center' }); } else clearLinks();
-    });
-  });
-  var capParams = new URLSearchParams(location.search);
-  if (capParams.get('link')) {
-    var pl = document.querySelectorAll('.principle[data-link]')[parseInt(capParams.get('link'), 10) - 1];
-    if (pl) setTimeout(function () { showLinks(pl); }, 300);
-  }
-
-  /* ==========================================================
      4. 8色の価値観（書き出しワークのSTEP 6で使う。マップのセクションは廃止）
      ========================================================== */
   var COLORS8 = [
@@ -350,7 +220,7 @@
     var N = slides.length;
     var galOffset = 0, galVel = 0, galDrag = false, galLastX = 0, galMoved = 0, galScrollBase = null;
     var reduceG = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var fixedJo = capParams.get('jo');
+    var fixedJo = new URLSearchParams(location.search).get('jo');
     function layoutGal() {
       var small = window.innerWidth < 900;
       var R = small ? 460 : 760, step = small ? 21 : 17;
