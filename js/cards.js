@@ -74,6 +74,7 @@
 
   var TOTAL = 53, VISIBLE = 9, RADIUS = window.innerWidth < 700 ? 500 : 630;
   var deck = [];
+  var currentCard = null;
   var curAngle = 0, targetAngle = 0, curIndex = 0;
   var dragging = false, lastX = 0, velocity = 0, lastTime = 0, raf = null, startX = 0, startY = 0, dragDist = 0;
   var sceneEl = document.getElementById('eqccCarouselScene');
@@ -191,6 +192,7 @@
     document.getElementById('eqcc-card-chevron-shape').style.background = card.hex;
     var vt = document.getElementById('eqcc-card-value-text');
     vt.style.color = textColor(card.hex); vt.textContent = card.value;
+    currentCard = card;
     var actEl = document.getElementById("eqcc-card-action");
     actEl.innerHTML = card.action;
     /* 文字数の多いカードは、枠に収まる大きさまで文字を小さくする（1行あたり4文字までは標準サイズ） */
@@ -255,10 +257,61 @@
     }
   };
 
+  /* ---------- 引いたカードと気づきノートを、画像で保存 ---------- */
+  function drawCardImage(ctx, x0, y0, w, card) {
+    var S = window.EQSaveImage, cw = 440, ch = 660, k = cw / 182;
+    var x = x0 + (w - cw) / 2, y = y0;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,.28)'; ctx.shadowBlur = 44; ctx.shadowOffsetY = 18;
+    ctx.fillStyle = '#fff'; S.rrect(ctx, x, y, cw, ch, 12 * k); ctx.fill();
+    ctx.restore();
+    ctx.save();
+    S.rrect(ctx, x, y, cw, ch, 12 * k); ctx.clip();
+    ctx.fillStyle = card.hex; ctx.fillRect(x, y, cw, 6 * k);
+    ctx.fillStyle = '#444'; ctx.fillRect(x + cw / 2 - 18 * k, y + 24 * k, 36 * k, 2 * k);
+    /* 行動のことば */
+    var lines = card.action.split('<br>'), maxLen = 0;
+    lines.forEach(function (ln) { maxLen = Math.max(maxLen, ln.length); });
+    var fs = (maxLen > 4 ? Math.max(22, Math.floor(138 / maxLen)) : 34) * k;
+    ctx.fillStyle = '#333'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '700 ' + fs + 'px ' + S.SERIF;
+    var areaTop = y + 30 * k, areaBot = y + 173 * k, lh = fs * 1.3, top = (areaTop + areaBot) / 2 - (lines.length - 1) * lh / 2;
+    lines.forEach(function (ln, i) { ctx.fillText(ln, x + cw / 2, top + i * lh); });
+    /* 下の帯（山形）と価値 */
+    var by = y + 173 * k, bh = 82 * k;
+    ctx.fillStyle = card.hex; ctx.beginPath();
+    ctx.moveTo(x, by + bh * 0.2); ctx.lineTo(x + cw / 2, by); ctx.lineTo(x + cw, by + bh * 0.2);
+    ctx.lineTo(x + cw, by + bh); ctx.lineTo(x + cw / 2, by + bh * 0.8); ctx.lineTo(x, by + bh); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = textColor(card.hex); ctx.font = '700 ' + (14 * k) + 'px ' + S.SANS;
+    ctx.fillText(card.value, x + cw / 2, by + bh * 0.4 + 2 * k);
+    ctx.fillStyle = '#D32F2F'; ctx.font = 'italic 600 ' + (15 * k) + 'px "Brush Script MT",cursive,serif';
+    ctx.fillText('emotion', x + cw / 2, y + ch - 12 * k);
+    ctx.restore();
+    ctx.strokeStyle = '#e8e8e8'; ctx.lineWidth = 2; S.rrect(ctx, x, y, cw, ch, 12 * k); ctx.stroke();
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+  var saveBtn = document.getElementById('eqcc-save');
+  if (saveBtn) saveBtn.addEventListener('click', function () {
+    if (!currentCard || !window.EQSaveImage) return;
+    var card = currentCard;
+    function v(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+    window.EQSaveImage.compose({
+      heading: 'EQコアカード®を引きました', sub: '出たカードを見て、まず湧いた感情を、そのまま感じる。', accent: card.hex, topH: 660,
+      drawTop: function (ctx, x, y, w) { drawCardImage(ctx, x, y, w, card); },
+      sections: [
+        { label: '① このカードを見て、どんな感情が生まれましたか？', text: v('n1') },
+        { label: '② このカードから、自分への気づきは何ですか？', text: v('n2') },
+        { label: '③ この気づきをふまえて、どんな行動をとりますか？', text: v('n3') }
+      ],
+      foot: '自分の心が見えないから、カードで言葉にする。'
+    }).then(function (c) { window.EQSaveImage.show(c, 'EQコアカード.png'); });
+  });
+
   /* 撮影用：?draw=番号 で、そのカードを引いた状態にする */
   var drawParam = new URLSearchParams(location.search).get('draw');
   if (drawParam) setTimeout(function () {
     var c = EQCC_CARDS[parseInt(drawParam, 10)] || EQCC_CARDS[0];
     show(c);
+    if (new URLSearchParams(location.search).get("save")) setTimeout(function () { var n1 = document.getElementById("n1"); if (n1) n1.value = "ドキッとした。自分も周りに合わせてしまうことがある。"; document.getElementById("eqcc-save").click(); }, 300);
   }, 400);
 })();

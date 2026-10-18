@@ -53,3 +53,6 @@
 }
 @media (prefers-reduced-motion:reduce){ .lcar__card{ transition:opacity .3s; } }
 .capture .lcar__card{ transition:none !important; }
+/* イラストなど、正方形のアイコン画像を、枠いっぱいに見せる */
+.lcar__img--icon{ background:#fbf7ee; }
+.lcar__img--icon img{ object-fit:cover; padding:0; }

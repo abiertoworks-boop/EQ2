@@ -9,22 +9,22 @@
   var LENSES = {
     fact: {
       color: '#2f8540', kicker: '① 状態認識（事実）', title: '観察された事実',
-      desc: '客観的に観察された、ありのままの事実を、そのまま捉えている状態。',
-      bubble: '挨拶をした。<br>返事は、なかった。<br>何かあったのかな？', img: 'fact', alt: '首をかしげて考える女性',
+      desc: '実際に起きたことだけを見ている状態。「見たこと・聞いたこと」だけで、自分の考えはまだ入っていません。',
+      bubble: '挨拶をしたのに、返事がなかったな…<br>何かあったのかな？', img: 'fact', alt: '首をかしげて考える女性',
       list: ['主観や解釈を入れず、事実をそのまま見る', '良い・悪いの判断をしない', '五感で確認できること'],
       q: '「実際に起きたことは何か？」'
     },
     interp: {
       color: '#1f5bb8', kicker: '② 解釈（意味づけ）', title: '意味づけ',
       desc: '事実に対して、自分の経験や価値観をもとに、意味づけをしている状態。',
-      bubble: '返事がなかった……。<br>私に興味が<br>ないのかもしれない。', img: 'interp', alt: 'ほおに手を当てて不安そうな女性',
+      bubble: '返事がなかったな…。<br>私に興味がないのかな。', img: 'interp', alt: 'ほおに手を当てて不安そうな女性',
       list: ['事実に「意味」をつけている', '過去の経験や価値観が影響する', '人によって解釈が異なる'],
       q: '「この出来事を、どう受け止めているか？」'
     },
     assume: {
       color: '#b0473b', kicker: '③ 思い込み', title: '自分がつくった世界',
       desc: '解釈がさらに強まり、決めつけや思い込みで「自分がつくった世界」を見ている状態。',
-      bubble: 'やっぱり嫌われている。<br>私は必要とされていない。<br>どうせうまくいかない。', img: 'assume', alt: '目を閉じてうつむく女性',
+      bubble: 'やっぱり、嫌われてるのかも…。<br>私なんて、必要とされてないんだ。<br>どうせ、うまくいかないよ…。', img: 'assume', alt: '目を閉じてうつむく女性',
       list: ['解釈を「絶対の事実」として信じ込む', '決めつけや一般化が起こる', '自分の世界を狭め、苦しみや行動の制限につながる'],
       q: '「それは本当に事実か？ 他の可能性はないか？」'
     }
@@ -154,6 +154,34 @@
     cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (work.value && window.EQCards) setTimeout(function () { window.EQCards.drawColor(work.value); }, 900);
   });
+  /* ふり返りを、画像で保存 */
+  var wSave = document.getElementById('w-save');
+  if (new URLSearchParams(location.search).get("wsave")) setTimeout(function () {
+    document.getElementById("w-event").value = "会議で、自分の意見を言えなかった。"; document.getElementById("w-thought").value = "また言えなかった。";
+    document.getElementById("w-q1").value = "否定された"; document.getElementById("w-q2").value = "信頼されること"; document.getElementById("w-awareness").value = "私は、否定されるのが怖かったのだと気づいた。";
+    work.emotions = ["不安", "悔しい"]; work.value = 6; wSave.click();
+  }, 600);
+  if (wSave) wSave.addEventListener('click', function () {
+    if (!window.EQSaveImage) return;
+    var c = work.value ? COLORS8[work.value - 1] : null;
+    var secs = [];
+    if (val('w-event')) secs.push({ label: '① 出来事', text: val('w-event') });
+    if (work.emotions.length) secs.push({ label: '② 感情（強さ ' + intensity.value + ' / 10）', text: work.emotions.join('・') });
+    if (val('w-thought')) secs.push({ label: '③ 心の声', text: '「' + val('w-thought') + '」' });
+    var rec = [];
+    if (val('w-q1')) rec.push('受け止め方：「' + val('w-q1') + '」');
+    if (val('w-q2')) rec.push('大切にしていたこと：「' + val('w-q2') + '」');
+    if (val('w-q3')) rec.push('思っていたこと：「' + val('w-q3') + '」');
+    if (rec.length) secs.push({ label: '④ 認識（意味づけ）', text: rec.join('\n') });
+    if (val('w-awareness')) secs.push({ label: '⑤ 自覚（気づいたこと）', text: val('w-awareness') });
+    if (c) secs.push({ label: '⑥ 大切にしていた価値観', text: '「' + c.title + '」（' + c.name + '）に近い価値観。\n' + c.desc.replace(/価値観$/, '') + '価値観です。' });
+    if (!secs.length) secs.push({ label: 'メモ', text: '今日は、答えを見つけることより、自分の認識に気づくことが目的です。' });
+    window.EQSaveImage.compose({
+      heading: '今日、あなたが自覚したこと', sub: '感情を感じるワーク｜この感情が分かった！を書き出してみよう', accent: c ? c.hex : '#6a52d9', topH: 0,
+      sections: secs, foot: '感情はあなたの心の道しるべ。受け入れて心が育つ。'
+    }).then(function (cv) { window.EQSaveImage.show(cv, '感情を感じるワーク.png'); });
+  });
+
   document.getElementById('w-restart').addEventListener('click', function () {
     ['w-event', 'w-thought', 'w-q1', 'w-q2', 'w-q3', 'w-awareness'].forEach(function (id) { document.getElementById(id).value = ''; });
     work.emotions = []; work.value = 0;

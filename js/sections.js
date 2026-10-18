@@ -109,4 +109,11 @@
       else if (!en[0].isIntersecting) running = false;
     }, { threshold: 0 }).observe(stage);
   } else { running = true; last = performance.now(); requestAnimationFrame(tick); }
+
+  /* 企業の事例カード：タップでも裏返る（スマホ用） */
+  [].forEach.call(document.querySelectorAll('.case'), function (c) {
+    c.setAttribute('tabindex', '0');
+    c.addEventListener('click', function (e) { if (window.matchMedia('(hover: none)').matches) c.classList.toggle('is-flip'); });
+    c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { c.classList.toggle('is-flip'); e.preventDefault(); } });
+  });
 })();

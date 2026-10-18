@@ -943,3 +943,71 @@ body{
 #work .stages{ perspective:none; }
 /* 導入文は、行の長さをそろえて自然に折り返す */
 :lang(ja) .lead, :lang(ja) .hero__lead{ text-wrap:balance; }
+
+/* ==========================================================================
+   2026-10-19：画像で保存／かんたんEQ診断のボタン配置／ワークの見出し位置／企業カードの裏返し
+   ========================================================================== */
+.savebar{ display:flex; justify-content:center; margin-top:1.6rem; }
+.savebar .btn{ min-width:240px; }
+.simg-open{ overflow:hidden; }
+.simg{ position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; padding:18px; background:rgba(14,18,40,.66); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); animation:fpIn .4s var(--ease-out); }
+.simg__box{ width:min(640px,100%); max-height:100%; display:flex; flex-direction:column; gap:.8rem; padding:20px; border-radius:24px; background:#f6f7fb; box-shadow:0 40px 80px -30px rgba(0,0,0,.6); }
+.simg__title{ font-family:var(--font-head); font-size:1.15rem; text-align:center; }
+.simg__imgwrap{ overflow:auto; border-radius:14px; min-height:0; background:#e4e7f1; -webkit-overflow-scrolling:touch; }
+.simg__img{ display:block; width:100%; height:auto; }
+.simg__hint{ font-size:.82rem; color:var(--ink-2); text-align:center; line-height:1.8; }
+.simg__actions{ display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+.simg__dl{ cursor:pointer; text-decoration:none; }
+
+/* かんたんEQ診断：画像を上、文章を左、ボタンを右下に */
+.gdiag{ display:block; padding:clamp(16px,2.4vw,28px); }
+.gdiag__art{ aspect-ratio:auto; height:clamp(220px,30vw,360px); max-height:none; margin-bottom:clamp(16px,2.4vw,28px); }
+.gdiag__art img{ object-position:50% 45%; }
+.gdiag__text{ display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:clamp(16px,3vw,40px); align-items:end; }
+.gdiag__text > *:not(.gdiag__btn){ grid-column:1; }
+.gdiag__btn{
+  grid-column:2; grid-row:1 / span 4; align-self:end; margin-top:0; min-width:280px; min-height:60px; color:#fff; border:0;
+  background:linear-gradient(115deg,#0e1735 0%,#18327a 48%,#2f73e6 100%); background-size:160% 100%; background-position:0 0;
+  box-shadow:0 20px 38px -18px rgba(24,50,122,.85); transition:background-position .8s var(--ease-out), transform .6s var(--ease-out), box-shadow .6s var(--ease-out);
+}
+.gdiag__btn:hover{ background-position:100% 0; transform:translateY(-3px); box-shadow:0 26px 44px -18px rgba(47,115,230,.9); }
+@media (max-width:700px){ .gdiag__text{ grid-template-columns:1fr; } .gdiag__btn{ grid-column:1; grid-row:auto; margin-top:1.2rem; width:100%; min-width:0; } }
+
+/* 感情を感じるワーク：3つのカードとワークの枠のあいだに */
+.workintro{ text-align:center; margin:clamp(8px,2vw,24px) auto clamp(36px,5vw,64px); }
+.workintro .workbadge{ margin-bottom:1.4rem; }
+.workintro .wsteps{ margin-top:0; }
+#work .stages{ margin-bottom:clamp(36px,5vw,64px); }
+
+/* EQを学べばどうなるか：結びの文 */
+.learn__close{ margin:clamp(28px,4vw,56px) auto 0; max-width:30em; text-align:center; font-family:var(--font-head); font-weight:600; font-size:clamp(1.35rem,2.9vw,2.1rem); line-height:2; }
+.learn__close em{ font-style:normal; color:var(--accent); }
+
+/* 企業の事例：ふれると裏返り、写真が現れる */
+.cases__grid{ perspective:1600px; }
+.case{ padding:0; background:transparent; border:0; box-shadow:none; position:relative; cursor:pointer; outline:none; transition:none; }
+.case:hover{ transform:none; box-shadow:none; }
+.case__inner{ display:grid; min-height:clamp(300px,24vw,340px); transform-style:preserve-3d; transition:transform 1s cubic-bezier(.16,1,.3,1); }
+.case:hover .case__inner, .case:focus-visible .case__inner, .case.is-flip .case__inner{ transform:rotateY(180deg); }
+.case__face{ grid-area:1 / 1; border-radius:22px; overflow:hidden; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.case__front{
+  position:relative; padding:1.6rem 1.5rem 3.4rem; background:var(--glass-strong); border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 22px 46px -34px rgba(21,27,52,.55);
+}
+.case__back{ transform:rotateY(180deg); background:#dfe3ee; box-shadow:0 30px 56px -30px rgba(21,27,52,.6); position:relative; }
+.case__back img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.case__back::after{ content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(14,18,40,.72), rgba(14,18,40,0) 55%); }
+.case__cap{ position:absolute; left:20px; right:20px; bottom:18px; z-index:2; color:#fff; font-family:var(--font-en); font-weight:600; font-size:1.3rem; letter-spacing:.02em; text-shadow:0 2px 12px rgba(0,0,0,.4); }
+.case__cap small{ display:block; margin-top:.1rem; font-family:var(--font-body); font-weight:400; font-size:.78rem; letter-spacing:.06em; opacity:.9; }
+/* 裏面があることを示すしるし：めくれた角と「裏面あり」のラベル */
+.case__tab{ position:absolute; right:16px; bottom:14px; display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .8rem .3rem .6rem; border-radius:999px; background:rgba(21,27,52,.06); color:var(--ink-2); font-size:.74rem; letter-spacing:.08em; }
+.case__tab i{ position:relative; width:20px; height:15px; }
+.case__tab i::before, .case__tab i::after{ content:""; position:absolute; width:12px; height:10px; border-radius:3px; border:1.5px solid currentColor; background:var(--glass-strong); }
+.case__tab i::before{ left:0; top:4px; } .case__tab i::after{ left:7px; top:0; animation:caseTab 2.6s ease-in-out infinite; }
+@keyframes caseTab{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(2px,-2px); } }
+.case__front::after{ content:""; position:absolute; right:0; top:0; width:46px; height:46px; background:linear-gradient(225deg, rgba(21,27,52,0) 50%, rgba(21,27,52,.12) 50%, rgba(255,255,255,.95) 100%); border-bottom-left-radius:14px; box-shadow:-4px 4px 10px -6px rgba(21,27,52,.4); }
+.case:hover .case__tab, .case:focus-visible .case__tab{ background:rgba(21,27,52,.12); }
+@media (prefers-reduced-motion:reduce){ .case__inner{ transition:none; } .case__tab i::after{ animation:none; } }
+.capture .case__inner{ transition:none; }
+.case .case__back p.case__cap{ color:#fff; font-size:1.3rem; line-height:1.5; }
+.case .case__back p.case__cap small{ font-size:.78rem; line-height:1.6; }
