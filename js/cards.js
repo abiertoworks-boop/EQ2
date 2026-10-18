@@ -72,7 +72,7 @@
   window.EQCC_CARDS = EQCC_CARDS;
   window.EQCC_COLOR_MAP = COLOR_MAP;
 
-  var TOTAL = 53, VISIBLE = 9, RADIUS = 420;
+  var TOTAL = 53, VISIBLE = 9, RADIUS = window.innerWidth < 700 ? 500 : 630;
   var deck = [];
   var curAngle = 0, targetAngle = 0, curIndex = 0;
   var dragging = false, lastX = 0, velocity = 0, lastTime = 0, raf = null, startX = 0, startY = 0, dragDist = 0;
@@ -110,7 +110,7 @@
       if (Math.abs(diff) > range + step) { el.style.visibility = 'hidden'; el.style.opacity = '0'; continue; }
       el.style.visibility = 'visible';
       var rad = diff * Math.PI / 180;
-      var z = RADIUS * Math.cos(rad) - RADIUS, x = RADIUS * Math.sin(rad);
+      var z = RADIUS * Math.cos(rad) - RADIUS - Math.min(1, Math.abs(diff) / step) * 50, x = RADIUS * Math.sin(rad);   /* 隣のカードの縁が、正面のカードの手前に食い込まないよう、少し奥へ下げる */
       var ratio = 1 - Math.abs(diff) / range;
       el.style.opacity = Math.max(0.15, ratio * 0.85 + 0.15);
       el.style.transform = 'translateX(' + x + 'px) translateZ(' + z + 'px) rotateY(' + (-diff) + 'deg) scale(' + Math.max(0.55, ratio * 0.45 + 0.55) + ')';

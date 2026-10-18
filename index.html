@@ -8,7 +8,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261018a">
+<link rel="stylesheet" href="css/style.css?v=20261018c">
+<link rel="stylesheet" href="css/eq-phrase.css?v=20261018c">
+<link rel="stylesheet" href="css/eq-hover-card.css?v=20261018c">
+<link rel="stylesheet" href="css/eq-layer-carousel.css?v=20261018c">
 <script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');if(/[?&]hover=1/.test(location.search))document.documentElement.classList.add('capture-hover');</script>
 </head>
 <body>
@@ -22,12 +25,11 @@
       <span class="brand__by">by 株式会社Brifu</span>
     </a>
     <nav class="nav" aria-label="ページ内">
-      <a href="#why">なぜEQ？</a>
       <a href="#about-eq">EQとは</a>
       <a href="#work">認識のワーク</a>
       <a href="#cards">EQコアカード</a>
       <a href="#journey">次への学び</a>
-      <a class="btn btn--sm" href="experience.html"><span>体験ワーク</span></a>
+      <a class="btn btn--sm" href="experience.html"><span>体験ワークを始める</span></a>
     </nav>
   </div>
 </header>
@@ -39,7 +41,7 @@
     <div class="container hero__inner">
       <p class="eyebrow reveal">EQ Gate — EQとの出会いの入口</p>
       <h1 class="hero__title reveal" style="--d:.1s">これからの時代は<br>EQだ！</h1>
-      <p class="hero__lead reveal" style="--d:.25s">EQ（感情知能）は、AI時代を生きる術。<br class="pc">「EQって何？」から、3分で体感できます。</p>
+      <p class="hero__lead reveal" style="--d:.25s">EQ（感情知能）は、AI時代を生きる術。「EQって何？」から、3分で体感できます。</p>
       <div class="hero__actions reveal" style="--d:.4s">
         <a class="btn" href="experience.html" data-orb-hover="#9b5de5"><span>体験ワークをはじめる</span></a>
         <a class="btn btn--ghost" href="#why" data-orb-hover="#dd9a45"><span>EQって何？を知る</span></a>
@@ -63,53 +65,41 @@
       <div class="section-head">
         <p class="eyebrow reveal">Why EQ — なぜ、今EQなのか</p>
         <h2 class="h-1 reveal">EQって何？<br>その答えは、これからの時代にあります。</h2>
-        <p class="lead reveal">EQ（Emotional Intelligence＝感情知能）は、自分と人の心を理解し、よりよい選択につなげる力。<br class="pc">知らなかった人ほど、知った日から、見える景色が変わります。</p>
+        <p class="lead reveal">EQ（Emotional Intelligence＝感情知能）は、自分と人の心を理解し、よりよい選択につなげる力。知らなかった人ほど、知った日から、見える景色が変わります。</p>
       </div>
       <div class="why4">
-        <article class="why4__card reveal" style="--wc:#3f78d0">
-          <span class="why4__no">01</span>
-          <h3>EQは、<br>AI時代を生きる術となる。</h3>
-          <p>知識や作業をAIが担う時代に、人にしかできないのは「感じ、理解し、選ぶ」こと。EQは、その土台になる力です。</p>
+        <article class="fxcard why4__card reveal" style="--wc:#3f78d0" data-orb-hover="#3f78d0" tabindex="0">
+          <div class="fxcard__img"><img src="images/photos/why-ai.jpg" alt="書類をかかえ、未来を見つめるビジネスパーソン" width="1100" height="733" loading="lazy"></div>
+          <div class="fxcard__body">
+            <span class="why4__no">01</span>
+            <h3>EQは、AI時代を<br>生きる術となる。</h3>
+            <p>知識や作業をAIが担う時代に、人にしかできないのは「感じ、理解し、選ぶ」こと。EQは、その土台になる力です。</p>
+          </div>
         </article>
-        <article class="why4__card reveal" style="--wc:#d9772b;--d:.1s">
-          <span class="why4__no">02</span>
-          <h3>EQを身に付けて、<br>リスクマネジメントに備える。</h3>
-          <p>感情に流された判断や、人間関係のすれ違い。仕事も人生も、リスクの多くは「人の心の動き」から生まれます。EQは、それに備える力です。</p>
+        <article class="fxcard why4__card reveal" style="--wc:#d9772b;--d:.1s" data-orb-hover="#d9772b" tabindex="0">
+          <div class="fxcard__img"><img src="images/photos/why-risk.jpg" alt="倒れていくドミノを、手でせき止める様子" width="1100" height="734" loading="lazy"></div>
+          <div class="fxcard__body">
+            <span class="why4__no">02</span>
+            <h3>EQを身に付けて、<br>リスクマネジメントに備える。</h3>
+            <p>感情に流された判断や、人間関係のすれ違い。仕事も人生も、リスクの多くは「人の心の動き」から生まれます。EQは、それに備える力です。</p>
+          </div>
         </article>
-        <article class="why4__card reveal" style="--wc:#7a5cd6;--d:.2s">
-          <span class="why4__no">03</span>
-          <h3>最速で人生を変える、<br>解決方法！</h3>
-          <p>知識を増やすより先に、自分の見え方に気づくこと。気づいた瞬間から、変化は始まります。</p>
+        <article class="fxcard why4__card reveal" style="--wc:#4a9a64;--d:.2s" data-orb-hover="#4a9a64" tabindex="0">
+          <div class="fxcard__img"><img src="images/photos/why-start.jpg" alt="「START」と書かれた道の上から、光のさす方へ歩き出す後ろ姿" width="1100" height="825" loading="lazy"></div>
+          <div class="fxcard__body">
+            <span class="why4__no">03</span>
+            <h3>最速で人生を変える、<br>解決方法！</h3>
+            <p>知識を増やすより先に、自分の見え方に気づくこと。気づいた瞬間から、変化は始まります。</p>
+          </div>
         </article>
-      </div>
-      <div class="why4__wide reveal" style="--d:.15s">
-        <span class="why4__no">04</span>
-        <p>今を変えたいと思う気持ち（向上心）が、<br class="pc"><em>EQを取り入れることで、人生に変革をもたらす。</em></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ きっかけ：最初に興味を持ったこと ============ -->
-  <section class="sec sec--veil2" id="trigger" data-orb="0.45" data-orb-x="2.2" data-orb-z="-0.8">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow reveal">Your First Step — はじめの一歩</p>
-        <h2 class="h-1 reveal">EQを学びたいと思った<br>きっかけは？</h2>
-        <p class="lead reveal">はじまりは、みんな小さな興味から。心当たりのあるものは、ありませんか？</p>
-      </div>
-      <ul class="trig">
-        <li class="trig__b reveal"><span>聞いたことあるから、<br>興味がある</span></li>
-        <li class="trig__b reveal" style="--d:.08s"><span>IQよりEQが大事だと<br>聞いた</span></li>
-        <li class="trig__b reveal" style="--d:.16s"><span>取り入れると、<br>どうなるのか？</span></li>
-        <li class="trig__b reveal" style="--d:.24s"><span>なんとなく、<br>良さそうに感じた</span></li>
-        <li class="trig__b reveal" style="--d:.32s"><span>もしかしたら、<br>人生が良くなるのかも</span></li>
-        <li class="trig__b reveal" style="--d:.4s"><span>抱えていたモヤモヤが、<br>晴れるかも</span></li>
-      </ul>
-      <div class="trig__close reveal">
-        <p>その小さな興味が、はじめの一歩です。<br>まずは3分、自分の「見え方」を体験してみませんか。</p>
-        <div class="hero__actions">
-          <a class="btn" href="experience.html" data-orb-hover="#9b5de5"><span>体験ワークをはじめる（無料）</span></a>
-        </div>
+        <article class="fxcard why4__card reveal" style="--wc:#7a5cd6;--d:.3s" data-orb-hover="#7a5cd6" tabindex="0">
+          <div class="fxcard__img"><img src="images/photos/why-hope.jpg" alt="新緑の中で、空を見上げて微笑む女性" width="1100" height="667" loading="lazy"></div>
+          <div class="fxcard__body">
+            <span class="why4__no">04</span>
+            <h3>向上心が、<br>人生に変革をもたらす。</h3>
+            <p>今を変えたいと思う気持ち（向上心）が、EQを取り入れることで、人生に変革をもたらします。</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -120,7 +110,7 @@
       <div class="section-head">
         <p class="eyebrow reveal">What is EQ — EQとは何か</p>
         <h2 class="h-1 reveal">EQは、感情に気づき、<br>選択に活かす力。</h2>
-        <p class="lead reveal">EQとは、Emotional Intelligenceの略で、日本語では「感情知能」と呼ばれています。<br class="pc">一般的なEQでは、自分や相手の感情に気づき、その感情を理解し、適切に扱いながら、<br class="pc">考え方や行動に活かしていく力として捉えられています。</p>
+        <p class="lead reveal">EQとは、Emotional Intelligenceの略で、日本語では「感情知能」と呼ばれています。一般的なEQでは、自分や相手の感情に気づき、その感情を理解し、適切に扱いながら、考え方や行動に活かしていく力として捉えられています。</p>
       </div>
       <div class="eqdef">
         <div class="eqtri">
@@ -192,13 +182,67 @@
     </div>
   </section>
 
+  <!-- ============ きっかけ：最初に興味を持ったこと（重なるカードのカルーセル） ============ -->
+  <section class="sec sec--veil2" id="trigger" data-orb="0.45" data-orb-x="2.2" data-orb-z="-0.8">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow reveal">Your First Step — はじめの一歩</p>
+        <h2 class="h-1 reveal">EQを学びたいと思った<br>きっかけは？</h2>
+        <p class="lead reveal">はじまりは、みんな小さな興味から。心当たりのあるものは、ありませんか？</p>
+      </div>
+      <div class="lcar reveal" data-lcar data-autoplay="4600" aria-label="EQに興味を持ったきっかけ。左右にドラッグ、または矢印で切り替えられます">
+        <div class="lcar__stage">
+          <article class="lcar__card" style="--wc:#3f78d0" data-orb-hover="#3f78d0">
+            <h3 class="lcar__t">聞いたことあるから、<br>興味がある</h3>
+            <div class="lcar__img"><img src="images/photos/scene.jpg" alt="時計の文字盤と地球が渦を巻く、時の流れのイメージ" loading="lazy" draggable="false"></div>
+            <span class="lcar__pill">01 / 06</span>
+          </article>
+          <article class="lcar__card" style="--wc:#7a5cd6" data-orb-hover="#7a5cd6">
+            <h3 class="lcar__t">IQよりEQが大事だと<br>聞いた</h3>
+            <div class="lcar__img lcar__img--soft"><img src="images/brain/aware.png" alt="円の中の脳に、音叉の響きが届くイメージ" loading="lazy" draggable="false"></div>
+            <span class="lcar__pill">02 / 06</span>
+          </article>
+          <article class="lcar__card" style="--wc:#2f7fb5" data-orb-hover="#2f7fb5">
+            <h3 class="lcar__t">取り入れると、<br>どうなるのか？</h3>
+            <div class="lcar__img"><img src="images/photos/iceberg.jpg" alt="海に浮かぶ氷山と、EQコアカードの束" loading="lazy" draggable="false"></div>
+            <span class="lcar__pill">03 / 06</span>
+          </article>
+          <article class="lcar__card" style="--wc:#d9772b" data-orb-hover="#d9772b">
+            <h3 class="lcar__t">なんとなく、<br>良さそうに感じた</h3>
+            <div class="lcar__img"><img src="images/photos/write.jpg" alt="琥珀色に揺れる水面をのぞきこんだ写真" loading="lazy" draggable="false"></div>
+            <span class="lcar__pill">04 / 06</span>
+          </article>
+          <article class="lcar__card" style="--wc:#4a9a64" data-orb-hover="#4a9a64">
+            <h3 class="lcar__t">もしかしたら、<br>人生が良くなるのかも</h3>
+            <div class="lcar__img"><img src="images/photos/why-hope.jpg" alt="新緑の中で、空を見上げて微笑む女性" loading="lazy" draggable="false" style="object-position:72% 50%"></div>
+            <span class="lcar__pill">05 / 06</span>
+          </article>
+          <article class="lcar__card" style="--wc:#3f78d0" data-orb-hover="#3f78d0">
+            <h3 class="lcar__t">抱えていたモヤモヤが、<br>晴れるかも</h3>
+            <div class="lcar__img lcar__img--soft"><img src="images/photos/eq-diagnosis.jpg" alt="青い球と、飛び散る青と緑の結晶のイメージ" loading="lazy" draggable="false"></div>
+            <span class="lcar__pill">06 / 06</span>
+          </article>
+        </div>
+        <button class="lcar__nav lcar__nav--prev" type="button" aria-label="前のカード">‹</button>
+        <button class="lcar__nav lcar__nav--next" type="button" aria-label="次のカード">›</button>
+        <div class="lcar__dots" role="tablist" aria-label="カードを選ぶ"></div>
+      </div>
+      <div class="trig__close reveal">
+        <p>その小さな興味が、はじめの一歩です。まずは3分、自分の「見え方」を体験してみませんか。</p>
+        <div class="hero__actions">
+          <a class="btn" href="experience.html" data-orb-hover="#9b5de5"><span>体験ワークを始める（無料）</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ EXPERIENCE ============ -->
   <section class="sec sec--veil1" id="experience" data-orb="0.6" data-orb-z="-0.6">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow reveal">Experience — 3つの体験</p>
-        <h2 class="h-1 reveal">読むだけでは、<br>心は動かない。</h2>
-        <p class="lead reveal">EQ（感情を理解し、活かす力）は、知識として覚えるより、<br class="pc">自分の心で確かめたときに身につきます。<br class="pc">EQ Gateには、すぐに始められる3つの体験があります。</p>
+        <h2 class="h-1 reveal">EQは、<br>感情を感じることから。</h2>
+        <p class="lead reveal">EQ（感情を理解し、活かす力）は、知識として覚えるより、自分の心で確かめたときに身につきます。EQ Gateには、すぐに始められる3つの体験があります。</p>
       </div>
       <div class="folders">
         <a class="fcard reveal" href="experience.html" style="--c:#3f78d0;--c2:#b8d0f5" data-orb-hover="#4a8ae0">
@@ -249,7 +293,7 @@
     <div class="container">
       <div class="section-head">
         <p class="eyebrow reveal">The Filter — 同じ出来事、3つの見え方</p>
-        <h2 class="h-1 reveal">同じ出来事でも、<br>見るフィルターで結果は変わる。</h2>
+        <h2 class="h-1 reveal">同じ出来事でも、<br>受け取り方は人それぞれ。</h2>
       </div>
       <div class="filter">
         <div class="filter__scene reveal">
@@ -289,11 +333,15 @@
 
   <!-- ============ WORK：認識のクセを体験する ============ -->
   <section class="sec sec--veil3" id="work" data-orb="0.35" data-orb-z="-2">
-    <div class="container">
+    <div class="container container--wide">
       <div class="section-head section-head--center">
-        <p class="eyebrow reveal">Self-Awareness Work — 認識のクセを体験する</p>
-        <h2 class="h-1 reveal">感情が動いた出来事を、<br>6つのステップで書き出す。</h2>
-        <p class="lead reveal">「EQ認識理論 Basic Workbook」に沿って、出来事・感情・思考・認識・自覚、そして大切にしていた価値観の順に、<br class="pc">自分の言葉で書いてみましょう。書いた内容はこの画面の中だけで使われ、どこにも送信されません。</p>
+        <p class="eyebrow reveal">Self-Awareness Work — 感情を感じるワーク</p>
+        <p class="workbadge reveal"><span class="workbadge__k">感情を感じるワーク</span><span class="workbadge__s">気づく・受けとめる・自覚する</span></p>
+        <h2 class="h-1 reveal">この感情が分かった！を<br>書き出してみよう！</h2>
+        <p class="lead reveal">出来事・感情・思考・認識・自覚、そして大切にしていた価値観の順に、自分の言葉で書いてみましょう。書いた内容はこの画面の中だけで使われ、どこにも送信されません。</p>
+        <ol class="wsteps reveal" aria-label="書き出す6つの項目">
+          <li><b>1</b>出来事</li><li><b>2</b>感情</li><li><b>3</b>思考</li><li><b>4</b>認識</li><li><b>5</b>自覚</li><li><b>6</b>大切な価値観</li>
+        </ol>
       </div>
 
       <div class="stages reveal">
@@ -404,7 +452,7 @@
       <div class="section-head section-head--center">
         <p class="eyebrow reveal">EQ Core Card® — 実践ツール</p>
         <h2 class="h-1 reveal">自分の心は、見えない。<br>だから、言葉にする。</h2>
-        <p class="lead reveal">53枚のEQコアカード®から、今の自分が意識したいことを1枚引いてみましょう。<br class="pc">出たカードを見て、まず湧いた感情を、そのまま感じてください。</p>
+        <p class="lead reveal">53枚のEQコアカード®から、今の自分が意識したいことを1枚引いてみましょう。出たカードを見て、まず湧いた感情を、そのまま感じてください。</p>
       </div>
 
       <div class="deck-area reveal">
@@ -547,10 +595,12 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/orb.js?v=20261018a"></script>
-<script src="js/common.js?v=20261018a"></script>
-<script src="js/main.js?v=20261018a"></script>
-<script src="js/cards.js?v=20261018a"></script>
-<script src="js/sections.js?v=20261018a"></script>
+<script src="js/orb.js?v=20261018c"></script>
+<script src="js/common.js?v=20261018c"></script>
+<script src="js/eq-phrase.js?v=20261018c" defer></script>
+<script src="js/eq-layer-carousel.js?v=20261018c" defer></script>
+<script src="js/main.js?v=20261018c"></script>
+<script src="js/cards.js?v=20261018c"></script>
+<script src="js/sections.js?v=20261018c"></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+/* ==========================================================================
+   eq-hover-card.css — 写真つきのカード（ホバーで持ち上がり、写真がゆっくり拡大、色の光がにじむ）
+   .fxcard の --wc に色を入れる。ワイヤー球体（orb.js）と組み合わせるときは、data-orb-hover="色" を付ける
+   （付けた枠にふれると、球体がその色で波立つ）。使い方は README.md。
+   ========================================================================== */
+.fxcard{
+  --wc:#3f78d0;
+  position:relative; display:flex; flex-direction:column; overflow:hidden; border-radius:24px; outline:none;
+  background:var(--glass-strong, rgba(255,255,255,.78)); border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 24px 50px -38px rgba(21,27,52,.5);
+  transition:transform .8s cubic-bezier(.16,1,.3,1), box-shadow .8s cubic-bezier(.16,1,.3,1), border-color .5s;
+}
+.fxcard__img{ position:relative; aspect-ratio:4/3; overflow:hidden; background:#e8eaf1; }
+.fxcard__img img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.4s cubic-bezier(.16,1,.3,1); }
+.fxcard__img::after{ content:""; position:absolute; inset:auto 0 0 0; height:46%; background:linear-gradient(to top, color-mix(in srgb, var(--wc) 34%, transparent), transparent); opacity:.55; transition:opacity .8s; }
+.fxcard__body{ position:relative; padding:20px 22px 24px; flex:1; }
+.fxcard:hover, .fxcard:focus-visible{ transform:translateY(-10px); border-color:color-mix(in srgb, var(--wc) 50%, #fff); box-shadow:0 38px 64px -34px color-mix(in srgb, var(--wc) 62%, transparent); }
+.fxcard:hover .fxcard__img img, .fxcard:focus-visible .fxcard__img img{ transform:scale(1.09); }
+.fxcard:hover .fxcard__img::after, .fxcard:focus-visible .fxcard__img::after{ opacity:1; }
+@media (prefers-reduced-motion:reduce){ .fxcard, .fxcard__img img{ transition:none; } }

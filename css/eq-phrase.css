@@ -1,0 +1,12 @@
+/* ==========================================================================
+   eq-phrase.css — 日本語の「段の切り方」を自然にする CSS（eq-phrase.js とセットで使う。CSS だけでも効く）
+   ・word-break:auto-phrase … 文節の途中で改行しない（Chrome / Edge 119 以降）
+   ・line-break:strict      … 「、」「。」「ー」「ゃ」などが行頭に来ない
+   ・text-wrap:balance      … 見出しの行の長さをそろえる
+   ・text-wrap:pretty       … 本文の最後の行が1文字だけ余るのを防ぐ
+   eq-phrase.js が文節に <wbr> を入れた要素（[data-phrased]）は、keep-all で <wbr> の位置だけで折り返す。
+   ========================================================================== */
+html:lang(ja){ line-break:strict; }
+:lang(ja) h1, :lang(ja) h2, :lang(ja) h3, :lang(ja) h4{ word-break:auto-phrase; text-wrap:balance; }
+:lang(ja) p, :lang(ja) li, :lang(ja) dd, :lang(ja) figcaption, :lang(ja) label{ word-break:auto-phrase; text-wrap:pretty; }
+:lang(ja) [data-phrased]{ word-break:keep-all; overflow-wrap:anywhere; }
