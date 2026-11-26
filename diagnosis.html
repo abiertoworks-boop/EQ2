@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>かんたんEQ診断｜EQ Gate — 株式会社Brifu</title>
+<meta name="description" content="今の悩みから、あなたが今伸ばすとよいEQの力がわかる「かんたんEQ診断」。3問（場合により4問）・1分ほど。点数はつけません。回答は保存・送信されません。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20261019c">
+<link rel="stylesheet" href="css/eq-phrase.css?v=20261019c">
+<link rel="stylesheet" href="css/diagnosis.css?v=20261126">
+<script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');</script>
+</head>
+<body>
+
+<canvas id="core-canvas" aria-hidden="true"></canvas>
+
+<header class="site-header" id="header">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">EQ Gate</span>
+      <span class="brand__by">by 株式会社Brifu</span>
+    </a>
+    <nav class="nav" aria-label="サイト内">
+      <a href="index.html#about-eq">EQとは</a>
+      <a href="index.html#work">認識のワーク</a>
+      <a href="index.html#cards">EQコアカード</a>
+      <a href="index.html#journey">次への学び</a>
+      <a class="btn btn--sm btn--ghost" href="reserve.html"><span>体験会に参加する</span></a>
+      <a class="btn btn--sm btn--ghost" href="index.html"><span>EQ Gate トップ</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero diag-hero" id="diagnosis" data-orb="0.5" data-orb-x="3.8">
+    <div class="container">
+      <div class="diag diag-page">
+        <div class="section-head">
+          <p class="eyebrow reveal">EQ Check — かんたんEQ診断</p>
+          <h1 class="h-1 reveal">なぜ、分かっているのに<br>うまくいかないのだろう？</h1>
+          <p class="lead reveal">自分の心、人との関係、チームや組織。<br>今の悩みから、あなたが今伸ばすとよいEQの力を見つけます。</p>
+        </div>
+
+        <div class="panel reveal" id="diagPanel">
+          <div class="diag__intro" id="diagIntro">
+            <h2 class="h-2">悩み解決のヒントがわかる<br>かんたんEQ診断</h2>
+            <p class="lead">今の悩みや困りごとから、あなたが今伸ばすとよいEQの力がわかります。<br>性格タイプを当てる診断ではありません。答えに正解・不正解もありません。</p>
+            <button class="btn" id="diagStart" type="button"><span>診断をはじめる</span><span aria-hidden="true">→</span></button>
+            <ul class="diag__notes">
+              <li>3問（場合により4問）・所要1分ほど。</li>
+              <li>点数や優劣はつけません。回答は保存・送信されません。</li>
+              <li>結果から、その力を育てる学び（EQ Platform）をご案内します。</li>
+            </ul>
+          </div>
+          <div id="diagQuiz" hidden></div>
+          <div id="diagResult" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--veil1" id="about-diagnosis">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow reveal">About this diagnosis</p>
+        <h2 class="h-2 reveal">この診断の目的は、<br>EQを教えることではありません。</h2>
+        <p class="lead reveal">「EQって何なのか分からない」から、「もしかしたら自分にも関係があるかもしれない」へ。「自分はここに課題があるのかもしれない」から、「だったら少し知ってみたい」へ。</p>
+        <p class="lead reveal">診断の役割は、商品を売ることではなく、自己認識を起こすこと。自分ってこういうところがあるんだ、と気づいた先に、EQの学びがあります。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p>感情を理解し、お互いを大切にする社会をつくる。</p>
+      <small>© 株式会社Brifu — EQ Gate</small>
+    </div>
+    <nav aria-label="関連サイト">
+      <a href="index.html">EQ Gate トップ</a>
+      <a href="https://abiertoworks-boop.github.io/eq-platform/" target="_blank" rel="noopener">EQ Platform</a>
+      <a href="https://abiertoworks-boop.github.io/brifu-site/" target="_blank" rel="noopener">株式会社Brifu</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/orb.js?v=20261019c"></script>
+<script src="js/common.js?v=20261019c"></script>
+<script src="js/eq-phrase.js?v=20261019c" defer></script>
+<script src="js/diagnosis.js?v=20261126"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* ==========================================================================
+   diagnosis.css — かんたんEQ診断（株式会社Brifuのサイトから EQ Gate へ移設）
+   EQ Gate の色・書体（--accent の紫、--navy、Zen系の書体）に合わせている。
+   ========================================================================== */
+.diag-page{ max-width:860px; }
+.diag-page .panel{ max-width:none; padding:clamp(1.6rem,5vw,3.4rem); }
+.diag__intro .lead{ margin-bottom:1.8rem; }
+.diag__notes{ margin-top:1.6rem; display:grid; gap:.4rem; font-size:.84rem; color:var(--ink-3); }
+.diag__notes li{ display:flex; gap:.6rem; }
+.diag__notes li::before{ content:"—"; color:var(--accent); }
+
+.diag__progress{ display:flex; align-items:center; gap:1rem; margin-bottom:1.8rem; font-family:var(--font-en); font-size:.74rem; letter-spacing:.2em; color:var(--accent); }
+.diag__progress .bar{ flex:1; height:3px; border-radius:3px; background:var(--line-2); position:relative; overflow:hidden; }
+.diag__progress .bar i{ position:absolute; inset:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transform-origin:left; transform:scaleX(0); transition:transform .8s var(--ease-out); }
+
+.q-card{ opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+.q-card.is-in{ opacity:1; transform:none; }
+.q-card__num{ font-family:var(--font-en); font-size:.76rem; letter-spacing:.2em; color:var(--ink-3); margin-bottom:.6rem; }
+.q-card__q{ font-family:var(--font-head); font-size:clamp(1.3rem,2.6vw,1.7rem); line-height:1.75; }
+.q-card__scene{ margin-top:.7rem; font-size:.92rem; color:var(--ink-2); }
+
+.choices{ display:grid; gap:.7rem; margin-top:1.6rem; }
+.choice{
+  position:relative; overflow:hidden; display:flex; align-items:center; gap:1rem; width:100%; text-align:left;
+  padding:1.05rem 1.3rem; border-radius:16px; border:1px solid var(--line-2); background:rgba(255,255,255,.72);
+  color:var(--ink); font:inherit; font-size:.98rem; line-height:1.75; cursor:pointer;
+  transition:transform .6s var(--ease-out), border-color .4s, background .4s;
+}
+.choice::before{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(106,82,217,.14), rgba(201,101,180,.1)); transform:translateX(-101%); transition:transform .8s var(--ease-out); }
+.choice > *{ position:relative; }
+.choice .dot{ width:18px; height:18px; border-radius:50%; border:2px solid var(--line-2); flex:none; transition:border-color .3s; }
+.choice .dot::after{ content:""; position:absolute; inset:3px; border-radius:50%; background:var(--accent); transform:scale(0); transition:transform .3s var(--ease-out); }
+.choice:hover{ transform:translateY(-3px); border-color:var(--accent); }
+.choice:hover::before{ transform:none; }
+.choice.is-picked{ border-color:var(--accent); background:#fff; }
+.choice.is-picked::before{ transform:none; }
+.choice.is-picked .dot{ border-color:var(--accent); }
+.choice.is-picked .dot::after{ transform:scale(1); }
+.choice__t{ display:block; line-height:1.75; }
+.choice__t small{ display:block; margin-top:2px; font-size:.8rem; color:var(--ink-3); }
+.choice.is-vague{ color:var(--ink-3); font-size:.94em; }
+.diag__nav{ margin-top:1.4rem; display:flex; justify-content:space-between; align-items:center; font-size:.82rem; color:var(--ink-3); }
+.diag__back{ background:none; border:0; color:var(--ink-2); cursor:pointer; font:inherit; font-size:.84rem; padding:.4rem 0; text-decoration:underline; text-underline-offset:4px; }
+.diag__back:hover{ color:var(--ink); }
+
+.result{ opacity:0; transform:translateY(20px); transition:opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+.result.is-in{ opacity:1; transform:none; }
+.result__type{ font-family:var(--font-en); font-size:.74rem; letter-spacing:.2em; color:var(--accent); }
+.result__title{ font-family:var(--font-head); font-size:clamp(1.6rem,3.6vw,2.3rem); line-height:1.55; margin-top:.5rem; }
+.result__lead{ margin-top:1.1rem; font-size:1rem; line-height:2.05; color:var(--ink-2); }
+.result__cta-lead{ margin-top:1.8rem; font-size:.84rem; letter-spacing:.08em; color:var(--ink-3); }
+.result__paths{ margin-top:.8rem; display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+a.path{ position:relative; display:block; padding:1.4rem 1.4rem 1.6rem; border-radius:18px; color:#fff; text-decoration:none; overflow:hidden; transition:transform .5s var(--ease-out); }
+.path--v{ background:linear-gradient(150deg,#121a3b,#3b2f86); }
+.path--h{ background:linear-gradient(150deg,#2a3566,#6a52d9); }
+.path .k{ font-family:var(--font-en); font-size:.72rem; letter-spacing:.2em; color:rgba(255,255,255,.78); }
+.path .t{ font-size:1.12rem; font-weight:700; margin-top:.4rem; padding-right:2.2rem; line-height:1.6; }
+.path .arr{ position:absolute; right:1.3rem; bottom:1.2rem; font-size:1.2rem; transition:transform .4s var(--ease-out); }
+.path .rec{ position:absolute; top:.9rem; right:.9rem; font-size:.68rem; letter-spacing:.14em; padding:.2rem .7rem; border-radius:999px; background:#fff; color:var(--navy); font-weight:700; }
+a.path:hover{ transform:translateY(-4px); }
+a.path:hover .arr{ transform:translateX(5px); }
+.result__actions{ margin-top:1.8rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; }
+@media (max-width:640px){ .result__paths{ grid-template-columns:1fr; } }
+@media (prefers-reduced-motion:reduce){ .q-card,.result,.choice,a.path{ transition:none; } .q-card,.result{ opacity:1; transform:none; } }
+/* 言葉の途中で改行しない */
+.q-card__q,.result__title,.result__lead,.path .t,.choice__t{ word-break:auto-phrase; line-break:strict; }
