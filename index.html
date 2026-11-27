@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/eq-phrase.css?v=20261019c">
 <link rel="stylesheet" href="css/eq-hover-card.css?v=20261019c">
 <link rel="stylesheet" href="css/eq-layer-carousel.css?v=20261019c">
+<link rel="stylesheet" href="css/eq-card-games.css?v=20261128a">
 <script>document.documentElement.classList.add('js');if(/[?&]capture/.test(location.search))document.documentElement.classList.add('capture');if(/[?&]hover=1/.test(location.search))document.documentElement.classList.add('capture-hover');</script>
 </head>
 <body>
@@ -28,6 +29,7 @@
       <a href="#about-eq">EQとは</a>
       <a href="#work">認識のワーク</a>
       <a href="#cards">EQコアカード</a>
+      <a href="#games">遊び方</a>
       <a href="#journey">次への学び</a>
       <a class="btn btn--sm btn--ghost" href="reserve.html"><span>体験会に参加する</span></a>
       <a class="btn btn--sm" href="experience.html"><span>体験ワークを始める</span></a>
@@ -503,6 +505,88 @@
     </div>
   </section>
 
+  <!-- ============ カードの遊び方（もしもゲーム／EQ自己認識力ゲーム） ============ -->
+  <section class="sec sec--veil2" id="games" data-orb="1" data-orb-k="0.2:-4.6,0,-1.2,0.4,0.5,0.6; 0.8:4.6,0.2,-1.0,0.4,0.5,0.6" style="--gc:#2f6fb5">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow reveal">Card Games — EQコアカードの遊び方</p>
+        <h2 class="h-1 reveal">53枚を並べて、<br>仲間と心を言葉にする。</h2>
+        <p class="lead reveal">EQコアカード®は、1枚引くだけでなく、<em>文字が見える面</em>で53枚すべてを並べて遊べます。選んだ理由と、その時の気持ちを話すだけ。自分でも気づいていなかった行動のクセや、大切にしている価値観が見えてきます。</p>
+      </div>
+
+      <div class="gm-picks" id="gm-picks">
+        <article class="gm-pick reveal" style="--gc:#2f6fb5">
+          <p class="gm-pick__en">Game 01</p>
+          <h3>もしもゲーム</h3>
+          <p class="gm-pick__sub">まだ知らない自分自身を発見する</p>
+          <p class="gm-pick__lead">「もしも、こうなったら？」という問いに、直感で1枚選びます。自分でも気づいていない隠れた行動パターンや、大切にしている価値観が見えてきます。</p>
+          <ol class="gm-steps">
+            <li><b>カードの文字が見える面</b>で行います。</li>
+            <li>主催者がお題を決めます。（とんでもない内容だと盛り上がります）</li>
+            <li>1分ほどでカードを選びます。</li>
+            <li>主催者の<b>「せーのっ！」</b>の掛け声で、全員がカードを選びます。</li>
+            <li>なぜそのカードを選んだかを順番に話します。<b>その時の気持ち</b>も答えてもらいます。</li>
+            <li>主催者は<b>最後に話して</b>終了。</li>
+          </ol>
+          <p class="gm-pick__note">※3〜4名がベスト。5名以上はグループを分けてください。1回のゲームは5〜7分が目安です。</p>
+          <button class="btn" type="button" data-start="moshimo"><span>カードを広げる</span></button>
+        </article>
+
+        <article class="gm-pick reveal" style="--gc:#2f8540;--d:.12s">
+          <p class="gm-pick__en">Game 02</p>
+          <h3>EQ自己認識力ゲーム</h3>
+          <p class="gm-pick__sub">本当の自分を知ろう！</p>
+          <p class="gm-pick__lead">自分が大切にしていることと、まわりから見えている自分。その二つを見比べる遊び方です。ずれても、重なっても、どちらも大切な気づきになります。</p>
+          <ol class="gm-steps">
+            <li>順番を決めます。</li>
+            <li>順番の人は、<b>自分が1番大切だな</b>と思うカードを選びます。</li>
+            <li>他の人は、その人が<b>1番大切にしていそうだな</b>と思う「行動」のカードを1枚選びます。</li>
+            <li>全員で一斉に<b>「せーの」</b>で、選んだカードを指さします。</li>
+            <li>本人・まわりの順に、選んだ理由とその時の気持ちを話します。</li>
+          </ol>
+          <p class="gm-pick__note">※交流会では「もしもゲーム → 自己認識ゲーム」の流れがおすすめです。話している内容に、反論や意見を言わないでください。</p>
+          <button class="btn" type="button" data-start="self"><span>カードを広げる</span></button>
+        </article>
+      </div>
+
+      <div class="gm-board" id="gm-board" hidden>
+        <div class="gm-bar">
+          <div class="gm-bar__main">
+            <p class="gm-bar__title" id="gm-label">Game</p>
+            <p class="gm-bar__q" id="gm-q"></p>
+          </div>
+          <div class="gm-bar__tools">
+            <button class="gm-tool" type="button" id="gm-newq">お題を変える</button>
+            <button class="gm-tool" type="button" id="gm-timer"><span class="gm-timer">1分タイマー</span></button>
+            <button class="gm-tool" type="button" id="gm-size">たくさん並べる</button>
+            <button class="gm-tool" type="button" id="gm-reshuffle">並べ直す</button>
+            <button class="gm-tool" type="button" id="gm-clear">選択をクリア</button>
+            <button class="gm-tool" type="button" id="gm-back">遊び方に戻る</button>
+          </div>
+        </div>
+
+        <div class="gm-grid" id="gm-grid" aria-label="EQコアカード53枚"></div>
+
+        <p class="gm-hint"><span id="gm-count">カードをタップして選びます</span>　／　何人でも、順番に選んで番号を付けられます</p>
+        <div class="gm-result__nav" style="justify-content:center">
+          <button class="btn" type="button" id="gm-show" disabled><span>選んだカードを見る</span></button>
+        </div>
+
+        <div class="gm-fab" id="gm-fab" aria-hidden="true"><span class="gm-fab__count" id="gm-fab-count"></span><button class="btn" type="button" id="gm-show2"><span>選んだカードを見る</span></button></div>
+
+        <div class="gm-result" id="gm-result" hidden>
+          <h3 class="gm-result__title" id="gm-result-title">選んだカード</h3>
+          <div class="gm-result__cards" id="gm-result-cards"></div>
+          <div class="gm-asks" id="gm-asks"></div>
+          <div class="gm-result__nav">
+            <button class="btn btn--ghost" type="button" id="gm-again"><span>もう一度遊ぶ</span></button>
+            <a class="btn" href="reserve.html"><span>体験会でみんなと遊ぶ</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ EQを学べばどうなるか ============ -->
   <section class="sec sec--veil2" id="learn" data-orb="1" data-orb-k="0.1:-5.3,0.2,-2.2,0.4,0.5,1.0; 0.5:5.0,0,1.8,0.4,0.5,1.0; 0.95:-5.2,-0.2,-1.8,0.4,0.5,1.0">
     <div class="container">
@@ -636,5 +720,6 @@
 <script src="js/main.js?v=20261019c"></script>
 <script src="js/cards.js?v=20261019c"></script>
 <script src="js/sections.js?v=20261019c"></script>
+<script src="js/games.js?v=20261128a"></script>
 </body>
 </html>

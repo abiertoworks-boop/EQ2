@@ -32,6 +32,15 @@
   /* ?capture=1&sec=#id で、その場所を画面の一番上にして撮影する */
   if (capture) {
     document.documentElement.style.scrollBehavior = 'auto';
+    /* ?capture=1&only=#id で、そのセクションだけを表示して撮る（撮影専用） */
+    var only = params.get('only');
+    if (only) {
+      var keep = document.querySelector(only);
+      [].forEach.call(document.querySelectorAll('main > section'), function (s) { if (s !== keep) s.style.display = 'none'; });
+      var ft = document.querySelector('.site-footer'); if (ft) ft.style.display = 'none';
+      if (keep) keep.style.paddingTop = '110px';
+    }
+
     var sel = params.get('sec');
     if (sel) {
       var jump = function () {
